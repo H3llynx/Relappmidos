@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Slurp Counter</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app">
+         <!-- AVATAR PICKING SECTION : display: none once the user picked the avatar -->
+        <div class="select-avatar" style="display:none;">
+            <div class="title">
+                <h1>Lick-O-Meter</h1>
+                <h2>Your daily slurp tracker!</h2>
+            </div>
+            <div class="container">
+                <p>Select your avatar:</p>
+                <div class="avatars-container">
+                    <img class="avatar-img" id="jordi" src="https://i.imghippo.com/files/vRw7255VHk.png" alt="Jordi" />
+                    <img class="avatar-img" id="helene" src="https://i.imghippo.com/files/SHF8802lXU.png" alt="Helene" />
+                </div>
+            </div>
+        </div>
+        <!-- COUNTER AND FACE SECTIONS -->
+        <div class="counter">
+            <div class="title">
+                <h2>Score</h2>
+            </div>
+            <div class="container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Body parts</th>
+                            <th>Points</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Forehead</td>
+                            <td id="forehead">0</td>
+                        </tr>
+                        <tr>
+                            <td>Ears</td>
+                            <td id="ears">0</td>
+                        </tr>
+                        <tr>
+                            <td>Eyes</td>
+                            <td id="eyes">0</td>
+                        </tr>
+                        <tr>
+                            <td>Cheek</td>
+                            <td id="cheek">0</td>
+                        </tr>
+                        <tr>
+                            <td>Nose</td>
+                            <td id="nose">0</td>
+                        </tr>
+                        <tr>
+                            <td>Chin / Beard</td>
+                            <td id="cheek">0</td>
+                        </tr>
+                        <tr>
+                            <td>Lips</td>
+                            <td id="lips">0</td>
+                        </tr>
+                        <tr>
+                            <td>Neck</td>
+                            <td id="neck">0</td>
+                        <tr class="total">
+                            <td class="score">Total score</td>
+                            <td class="score" id="total-score">0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="face">
+            <img id="face-img" src="https://i.imghippo.com/files/SHF8802lXU.png" alt="Helene's face" />
+            <div class="click-zone forehead-helene" data-points="50"></div>
+            <div class="click-zone left-eye-helene" data-points="50"></div>
+            <div class="click-zone right-eye-helene" data-points="50"></div>
+            <div class="click-zone ear-helene" data-points="30"></div>
+            <div class="click-zone nose-helene" data-points="30"></div>
+            <div class="click-zone left-cheek-helene" data-points="30"></div>
+            <div class="click-zone right-cheek-helene" data-points="30"></div>
+            <div class="click-zone chin-helene" data-points="30"></div>
+            <div class="click-zone lips-helene" data-points="30"></div>
+            <div class="click-zone neck-helene" data-points="30"></div>
+        </div>
+    </main>
+    </body>
+    <script src="script.js"></script>
+    </html>
