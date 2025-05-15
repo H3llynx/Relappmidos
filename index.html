@@ -15,14 +15,15 @@
                 <h2>Your daily slurp tracker!</h2>
             </div>
             <div class="sasha-mobile-device">
-                <img id="sasha-mobile" src="https://i.imghippo.com/files/ACK3766Rlk.png" alt="Sasha is ready for a lick attack" />
+                <img id="sasha-mobile" src="pix/sashou.png" alt="Sasha is ready for a lick attack" />
                 <!-- other img option: https://i.imghippo.com/files/RHp6928iIE.png -->
             </div>
             <div class="container">
                 <p>Select your avatar:</p>
                 <div class="avatars-container">
-                    <img onclick="selectUser('helene')" class="avatar-img" id="helene" src="https://i.imghippo.com/files/SHF8802lXU.png" alt="Helene" />
-                    <img onclick="selectUser('jordi')" class="avatar-img" id="jordi" src="https://i.imghippo.com/files/vRw7255VHk.png" alt="Jordi" />                
+                    <img onclick="selectUser('helene')" class="avatar-img" id="helene" src="pix/helene.png" alt="Helene" />
+                    <img onclick="selectUser('jordi')" class="avatar-img" id="jordi" src="pix/jordi.png" alt="Jordi" />
+                    <img onclick="selectUser('pixie')" class="avatar-img" id="jordi" src="pix/pixie.png" alt="Jordi" />                
                 </div>
             </div>
         </div>
@@ -30,91 +31,51 @@
             <!-- FACES -->
             <div id="face-container">
                 <!-- HELENE -->
-                <div id="face-helene">
-                    <img id="face-img-helene" src="https://i.imghippo.com/files/SHF8802lXU.png" alt="Helene's face" />
+                <div id="face-helene" class="face">
+                    <img id="face-img-helene" src="pix/helene.png" alt="Helene's face" />
                     <h2 class="user-instructions">Click a body part to score points</h2>
-                    <div class="click-zone forehead-helene" data-user="helene" data-part="forehead" data-points="10"></div>
-                    <div class="click-zone left-eye-helene" data-user="helene" data-part="eyes" data-points="50"></div>
-                    <div class="click-zone right-eye-helene" data-user="helene" data-part="eyes" data-points="50"></div>
-                    <div class="click-zone ear-helene" data-user="helene" data-part="ears" data-points="30"></div>
-                    <div class="click-zone nose-helene" data-user="helene" data-part="nose" data-points="10"></div>
-                    <div class="click-zone left-cheek-helene" data-user="helene" data-part="cheek" data-points="10"></div>
-                    <div class="click-zone right-cheek-helene" data-user="helene" data-part="cheek" data-points="10"></div>
-                    <div class="click-zone chin-helene" data-user="helene" data-part="chin" data-points="20"></div>
-                    <div class="click-zone lips-helene" data-user="helene" data-part="lips" data-points="100"></div>
-                    <div class="click-zone neck-helene" data-user="helene" data-part="neck" data-points="10"></div>
+                    <div class="click-zone forehead-helene" data-user="helene" data-part="forehead"></div>
+                    <div class="click-zone left-eye-helene" data-user="helene" data-part="eyes"></div>
+                    <div class="click-zone right-eye-helene" data-user="helene" data-part="eyes"></div>
+                    <div class="click-zone ear-helene" data-user="helene" data-part="ears"></div>
+                    <div class="click-zone nose-helene" data-user="helene" data-part="nose"></div>
+                    <div class="click-zone left-cheek-helene" data-user="helene" data-part="cheeks"></div>
+                    <div class="click-zone right-cheek-helene" data-user="helene" data-part="cheeks"></div>
+                    <div class="click-zone chin-helene" data-user="helene" data-part="chin"></div>
+                    <div class="click-zone mouth-helene" data-user="helene" data-part="mouth"></div>
+                    <div class="click-zone neck-helene" data-user="helene" data-part="neck"></div>
                 </div>
                 <!-- JORDI -->
-                <div id="face-jordi">
-                    <img id="face-img-jordi" src="https://i.imghippo.com/files/vRw7255VHk.png" alt="Jordi's face" />
+                <div id="face-jordi" class="face">
+                    <img id="face-img-jordi" src="pix/jordi.png" alt="Jordi's face" />
                     <h2 class="user-instructions">Click a body part to score points</h2>
-                    <div class="click-zone forehead-jordi" data-user="jordi" data-part="forehead" data-points="10"></div>
-                    <div class="click-zone left-eye-jordi" data-user="jordi" data-part="eyes" data-points="50"></div>
-                    <div class="click-zone right-eye-jordi" data-user="jordi" data-part="eyes" data-points="50"></div>
-                    <div class="click-zone left-ear-jordi" data-user="jordi" data-part="ears" data-points="30"></div>
-                    <div class="click-zone right-ear-jordi" data-user="jordi" data-part="ears" data-points="30"></div>
-                    <div class="click-zone nose-jordi" data-user="jordi" data-part="nose" data-points="10"></div>
-                    <div class="click-zone left-cheek-jordi" data-user="jordi" data-part="cheek" data-points="10"></div>
-                    <div class="click-zone right-cheek-jordi" data-user="jordi" data-part="cheek" data-points="10"></div>
-                    <div class="click-zone beard-jordi" data-user="jordi" data-part="beard" data-points="20"></div>
-                    <div class="click-zone lips-jordi" data-user="jordi" data-part="lips" data-points="100"></div>
-                    <div class="click-zone neck-jordi" data-user="jordi" data-part="neck" data-points="10"></div>
+                    <div class="click-zone forehead-jordi" data-user="jordi" data-part="forehead"></div>
+                    <div class="click-zone left-eye-jordi" data-user="jordi" data-part="eyes"></div>
+                    <div class="click-zone right-eye-jordi" data-user="jordi" data-part="eyes"></div>
+                    <div class="click-zone left-ear-jordi" data-user="jordi" data-part="ears"></div>
+                    <div class="click-zone right-ear-jordi" data-user="jordi" data-part="ears"></div>
+                    <div class="click-zone nose-jordi" data-user="jordi" data-part="nose"></div>
+                    <div class="click-zone left-cheek-jordi" data-user="jordi" data-part="cheeks"></div>
+                    <div class="click-zone right-cheek-jordi" data-user="jordi" data-part="cheeks"></div>
+                    <div class="click-zone beard-jordi" data-user="jordi" data-part="beard"></div>
+                    <div class="click-zone mouth-jordi" data-user="jordi" data-part="mouth"></div>
+                    <div class="click-zone neck-jordi" data-user="jordi" data-part="neck"></div>
+                </div>
+                <!-- PIXIE -->
+                <div id="face-pixie" class="face">
+                    <img id="face-img-jordi" src="pix/pixie.png" alt="Jordi's face" />
+                    <h2 class="user-instructions">Click a body part to score points</h2>
+                    <div class="click-zone forehead-pixie" data-user="pixie" data-part="forehead"></div>
+                    <div class="click-zone left-ear-pixie" data-user="pixie" data-part="ears"></div>
+                    <div class="click-zone right-ear-pixie" data-user="pixie" data-part="ears"></div>
+                    <div class="click-zone left-eye-pixie" data-user="pixie" data-part="eyes"></div>
+                    <div class="click-zone right-eye-pixie" data-user="pixie" data-part="eyes"></div>
+                    <div class="click-zone muzzle-pixie" data-user="pixie" data-part="muzzle"></div>
+                    <div class="click-zone left-whiskers-pixie" data-user="pixie" data-part="whiskers"></div>
+                    <div class="click-zone right-whiskers-pixie" data-user="pixie" data-part="whiskers"></div>
                 </div>
             </div>
             <!-- COUNTERS -->
-            <!-- JORDI -->
-            <div id="counter-jordi" class="counter">
-                <div class="title">
-                    <h2>Score</h2>
-                </div>
-                <div class="container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Body parts</th>
-                                <th>Points</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Forehead</td>
-                                <td id="forehead-jordi">0</td>
-                            </tr>
-                            <tr>
-                                <td>Ears</td>
-                                <td id="ears-jordi">0</td>
-                            </tr>
-                            <tr>
-                                <td>Eyes</td>
-                                <td id="eyes-jordi">0</td>
-                            </tr>
-                            <tr>
-                                <td>Cheek</td>
-                                <td id="cheek-jordi">0</td>
-                            </tr>
-                            <tr>
-                                <td>Nose</td>
-                                <td id="nose-jordi">0</td>
-                            </tr>
-                            <tr>
-                                <td>Beard</td>
-                                <td id="beard-jordi">0</td>
-                            </tr>
-                            <tr>
-                                <td>Lips</td>
-                                <td id="lips-jordi">0</td>
-                            </tr>
-                            <tr>
-                                <td>Neck</td>
-                                <td id="neck-jordi">0</td>
-                            <tr class="total">
-                                <td class="score">Total score</td>
-                                <td class="score" id="total-score-jordi">0</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
             <!-- HELENE: -->
             <div id="counter-helene" class="counter">
                 <div class="title">
@@ -128,47 +89,47 @@
                                 <th>Points</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>Forehead</td>
-                                <td id="forehead-helene">0</td>
-                            </tr>
-                            <tr>
-                                <td>Ears</td>
-                                <td id="ears-helene">0</td>
-                            </tr>
-                            <tr>
-                                <td>Eyes</td>
-                                <td id="eyes-helene">0</td>
-                            </tr>
-                            <tr>
-                                <td>Cheek</td>
-                                <td id="cheek-helene">0</td>
-                            </tr>
-                            <tr>
-                                <td>Nose</td>
-                                <td id="nose-helene">0</td>
-                            </tr>
-                            <tr>
-                                <td>Chin</td>
-                                <td id="chin-helene">0</td>
-                            </tr>
-                            <tr>
-                                <td>Lips</td>
-                                <td id="lips-helene">0</td>
-                            </tr>
-                            <tr>
-                                <td>Neck</td>
-                                <td id="neck-helene">0</td>
-                            </tr>
-                            <tr class="total">
-                                <td class="score">Total score</td>
-                                <td class="score" id="total-score-helene">0</td>
-                            </tr>
+                        <tbody id="score-body-helene">
                         </tbody>
                     </table>
                 </div>
             </div>
+            <!-- JORDI -->
+            <div id="counter-jordi" class="counter">
+                <div class="title">
+                    <h2>Score</h2>
+                </div>
+                <div class="container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Body parts</th>
+                                <th>Points</th>
+                            </tr>
+                        </thead>
+                        <tbody id="score-body-jordi">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- PIXIE -->
+            <div id="counter-pixie" class="counter">
+                <div class="title">
+                    <h2>Score</h2>
+                </div>
+                <div class="container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Body parts</th>
+                                <th>Points</th>
+                            </tr>
+                        </thead>
+                        <tbody id="score-body-pixie">
+                        </tbody>
+                    </table>
+                </div>
+            </div>          
         </div>
         <!-- BACK BUTTON -->
         <div id="back-button-container">
