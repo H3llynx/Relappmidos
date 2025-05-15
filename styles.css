@@ -436,8 +436,6 @@ tbody {
     display: block;
     width: 100%;
     height: auto;
-    padding: 30px 0;
-    margin: 0;
 }
 
 #back-button {
@@ -467,6 +465,10 @@ tbody {
 #back-button:active {
     background-color: #005858;
     transform: scale(0.95);
+}
+
+.sasha-mobile-device {
+    display: none;
 }
 
 @media only screen and (max-width: 1080px) {
@@ -519,7 +521,24 @@ tbody {
     }
 }
 
-@media only screen and (max-width: 390px) {
+@media only screen and (max-width: 500px) {
+    body {
+        background-image: none;
+    }
+
+    .app {
+        padding: 2% 2% 0 2%;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    .select-avatar {
+        width: 100%;
+        margin-bottom: 0;
+    }
+
     .avatars-container {
         width: 100%;
         flex-direction: column;
@@ -532,5 +551,20 @@ tbody {
 
     .avatar-img {
         width: 100%;
+    }
+
+    .sasha-mobile-device {
+        display: block;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .sasha-mobile-device img {
+        display: block;
+        width: 100%;
+        margin: 0;
+        height: auto;
+        filter: drop-shadow(0px 2px 6px rgba(0, 0, 0, 0.6));
     }
 }
