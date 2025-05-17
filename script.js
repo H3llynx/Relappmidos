@@ -1,161 +1,213 @@
 const selectAvatar = document.querySelector(".select-avatar");
 const backButton = document.getElementById("back-button");
-const backButtonContainer = document.getElementById("back-button-container")
-const clickZone = document.querySelectorAll(".click-zone");
+const clickZones = document.querySelectorAll(".click-zone");
+const counter = document.querySelector(".counter");
 
 let currentUser = null;
+const createdUsers = new Set();
+const defaultPoints = {
+  ears: 30, eyes: 50, chin: 15, beard: 15, nose: 10,
+  forehead: 10, cheeks: 10, mouth: 100, neck: 10,
+  whiskers: 10, muzzle: 20
+};
 
+const userPartsMap = {};
+const totalScores = {};
+const clickCounts = {};
+const clickHistory = {};
+const lastComboTime = {};
+
+// ---- RETRIEVE AND INITIALIZE USERS AND THEIR BODY PARTS --------------
+clickZones.forEach(zone => {
+  const user = zone.dataset.user;
+  const part = zone.dataset.part;
+  if (!userPartsMap[user]) userPartsMap[user] = new Set();
+  userPartsMap[user].add(part);
+  totalScores[user] = 0;
+  clickHistory[user] = [];
+  if (!clickCounts[user]) clickCounts[user] = {};
+  clickCounts[user][part] = 0;
+});
+
+// Utility to create DOM elements quicker:
+const createElement = (type, properties = {}) => {
+  const el = document.createElement(type);
+  Object.assign(el, properties);
+  return el;
+};
+
+// ---- CREATE SCORE SECTION (TABLE AND UNCLICK DROPDOWN) FOR A USER ----
+const createScoreForUser = (user) => {
+  if (createdUsers.has(user)) return console.log(`Welcome back ${user}!`);
+  // Sets the table:
+  const scoreTable = createElement("table", { id: `score-table-${user}`, className: "score-table" });
+  scoreTable.innerHTML = `
+    <thead><tr><th>Body parts</th><th>Points</th></tr></thead>
+    <tbody id="score-body-${user}"></tbody>
+  `;
+  // Sets the unclick (points removal) form:
+  const form = createElement("form", { 
+    id: `unclick-${user}`, 
+    className: "unclick-section",
+  });
+  form.innerHTML = `
+    <p style="color: #f0bd64;">Over-C-licked? Pick a value to remove licks:</p>
+    <select></select>
+    <button class="unclick">Remove</button>
+  `;
+  // Retrieves element from the table and the form to be worked on:
+  const scoreBody = scoreTable.querySelector("tbody");
+  const dropdown = form.querySelector("select");
+  // Creates a row / option for each body part (and user):
+  userPartsMap[user].forEach(part => {
+    const row = createElement("tr");
+    row.innerHTML = `
+      <td id="${part}">${part}</td>
+      <td id="${part}-${user}">0</td>
+    `;
+    scoreBody.appendChild(row);
+    const unclickOption = createElement("option", { value: part, textContent: part });
+    dropdown.appendChild(unclickOption);
+  });
+  // Sets total score:
+  const totalRow = createElement("tr");
+  totalRow.innerHTML = `
+    <td class="score">Total</td>
+    <td id="total-score-${user}" class="score">0</td>
+  `;
+  scoreBody.appendChild(totalRow);
+  // Adds all the above and creates the user:
+  document.getElementById("score-container").append(scoreTable, form);
+  createdUsers.add(user);
+  console.log(`Welcome to the game ${user}!`);
+};
+
+// ---- AVATAR SELECTION ------------------------------------------------
 const selectUser = (user) => {
   currentUser = user;
   selectAvatar.style.display = "none";
-  document.getElementById(`counter-${user}`).style.display = "block";
-  document.getElementById(`face-${user}`).style.display = "block";
   backButton.style.display = "block";
+  document.getElementById(`face-${user}`).style.display = "block";
+  counter.style.display = "block";
+  createScoreForUser(user);
+  document.querySelectorAll(".score-table, .unclick-section").forEach(el => el.style.display = "none");
+  document.getElementById(`score-table-${user}`).style.display = "table";
+  document.getElementById(`unclick-${user}`).style.display = "block";
 };
 
+// ---- GO BACK BUTTON --------------------------------------------------
 const goBack = () => {
   if (currentUser) {
-    document.getElementById(`counter-${currentUser}`).style.display = "none";
     document.getElementById(`face-${currentUser}`).style.display = "none";
+    document.getElementById(`unclick-${currentUser}`).style.display = "none";
+    counter.style.display = "none";
   }
   selectAvatar.style.display = "block";
   backButton.style.display = "none";
+  console.log(`Bye bye ${currentUser}!`);
+  if (totalScores[currentUser]>0){
+    console.log(`Current score: ${totalScores[currentUser]}!`);
+  }
   currentUser = null;
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-  const defaultPoints = {
-    ears: 30,
-    eyes: 50,
-    chin: 15,
-    beard: 15,
-    nose: 10,
-    forehead: 10,
-    cheeks: 10,
-    mouth: 100,
-    neck: 10,
-    whiskers: 10,
-    muzzle: 20
-  };
-  // Collect users and body parts from .click-zone elements
-  const zones = document.querySelectorAll(".click-zone");
-  const users = new Set(); // I will have 1 set per user - apparently easier to work with to avoid dupes.
-  const userPartsMap = {}; 
+// ---- ONCLICK VISUAL RESPONSE -----------------------------------------
+const showRipple = (e, zone) => {
+  const ripple = createElement("div", { className: "touch-feedback" });
+  const rect = zone.getBoundingClientRect();
+  ripple.style.left = `${(e.touches?.[0]?.clientX ?? e.clientX) - rect.left}px`;
+  ripple.style.top = `${(e.touches?.[0]?.clientY ?? e.clientY) - rect.top}px`;
+  zone.appendChild(ripple);
+  setTimeout(() => ripple.remove(), 400);
+};
 
-  // Associate each user to their body parts:
-  zones.forEach(zone => {
-    const user = zone.dataset.user; // retrieve the data-user (repeated but the Set will remove duplicate)
-    const part = zone.dataset.part; // retrieve the body parts from data-parts
-    users.add(user); // adds user to my Set to remove dupes
-    if (!userPartsMap[user]) {
-      userPartsMap[user] = new Set(); // will create the Set only if it does not already exist.
+// ---- ONCLICK FLOATING SCORE ------------------------------------------
+const showFloatingScore = (e, points) => {
+  const bubble = createElement("div", { className: "floating-score", textContent: `+${points}` });
+  const pageX = e.touches?.[0]?.pageX ?? e.pageX;
+  const pageY = e.touches?.[0]?.pageY ?? e.pageY;
+  Object.assign(bubble.style, {
+    position: "absolute", left: `${pageX}px`, top: `${pageY}px`,
+    transform: "translate(-50%, -100%)", pointerEvents: "none", zIndex: "1000"
+  });
+  document.body.appendChild(bubble);
+  setTimeout(() => bubble.remove(), 700);
+};
+
+// ---- COMBO SECTION (to be improved) ----------------------------------
+const handleCombo = (user, part, e) => {
+  const now = Date.now();
+  clickHistory[user].push({ part, time: now });
+  if (clickHistory[user].length > 10) clickHistory[user].shift();
+
+  const recent = clickHistory[user].slice(-3);
+  if (
+    recent.length === 3 &&
+    recent.every(entry => entry.part === part) &&
+    (recent[2].time - recent[0].time) <= 1000 &&
+    (now - lastComboTime[user]) >= 300
+  ) {
+    lastComboTime[user] = now;
+    const comboBubble = createElement("div", { className: "floating-score combo", textContent: "LICK ATTACK! x3" });
+    const faceContainer = document.getElementById(`face-${user}`);
+    comboBubble.style.position = "absolute";
+    comboBubble.style.left = "40%";
+    comboBubble.style.top = "30%";
+    comboBubble.style.transform = "translate(-50%, -50%)";
+    faceContainer.appendChild(comboBubble);
+    setTimeout(() => comboBubble.remove(), 1000);
+  }
+};
+
+// ---- ADD EVENT LISTENERS ---------------------------------------------
+clickZones.forEach(zone => {
+  const user = zone.dataset.user;
+  const part = zone.dataset.part;
+  const points = defaultPoints[part] || 0;
+  
+// ---- COUNTER FUNTION -------------------------------------------------
+  zone.addEventListener("click", (e) => {
+    showRipple(e, zone);
+    showFloatingScore(e, points);
+
+    const partCell = document.getElementById(`${part}-${user}`);
+    if (partCell) {
+      const current = parseInt(partCell.textContent) || 0;
+      partCell.textContent = current + points;
+      clickCounts[user][part] += 1;
+      console.log(`${user}: clicks for ${part}: ${clickCounts[user][part]}`);
     }
-    userPartsMap[user].add(part); // associate each user to their body parts. Ex: {helene: Set { "ear", "chin", "eye" },}
+
+    totalScores[user] += points;
+    document.getElementById(`total-score-${user}`).textContent = totalScores[user];
+
+    handleCombo(user, part, e);
   });
-
-  const userList = Array.from(users); // converts Set to List so I can work with it.
   
-  // Definition initial total score values:
-  const totalScores = {};
-
-  userList.forEach(user => {
-    totalScores[user] = 0;
-  });
-  // Access the dedicated user table and fill it:
-  userList.forEach(user => {
-    const scoreBody = document.getElementById(`score-body-${user}`);
-    const partsForUser = Array.from(userPartsMap[user] || []);
-    partsForUser.forEach(part => {
-      const row = document.createElement("tr");
-      const partCell = document.createElement("td");
-      partCell.textContent = part;
-      row.appendChild(partCell);
-  
-      const td = document.createElement("td");
-      td.id = `${part}-${user}`;
-      td.textContent = "0";
-      row.appendChild(td);
-  
-      scoreBody.appendChild(row);
-    });
-  
-    const totalRow = document.createElement("tr");
-    const totalLabel = document.createElement("td");
-    totalLabel.textContent = "Total";
-    totalLabel.classList.add("score");
-    totalRow.appendChild(totalLabel);
-  
-    const totalScoreCell = document.createElement("td");
-    totalScoreCell.id = `total-score-${user}`;
-    totalScoreCell.textContent = "0";
-    totalScoreCell.classList.add("score");
-    totalRow.appendChild(totalScoreCell);
-  
-    scoreBody.appendChild(totalRow);
-  });
-
-// adds floating points on the avatar's face for each click:
-  const showFloatingScore = (e, points) => {
-    const bubble = document.createElement("div");
-    bubble.classList.add("floating-score");
-    bubble.textContent = `+${points}`;
-    // ensures position is calculated correctly even on zoomed mobile devices.
-    // Explatation: page the position relative to the document, which is more consistent during zoom.
-    const pageX = e.touches?.[0]?.pageX ?? e.pageX;
-    const pageY = e.touches?.[0]?.pageY ?? e.pageY;
-
-    bubble.style.position = "absolute";
-    bubble.style.left = `${pageX}px`;
-    bubble.style.top = `${pageY}px`;
-    bubble.style.transform = "translate(-50%, -100%)";
-    bubble.style.pointerEvents = "none";
-    bubble.style.zIndex = "1000";
-    // must me added to the body to avoid CSS rotation on mapped zones:
-    document.body.appendChild(bubble);
-    setTimeout(() => bubble.remove(), 700);
-  };
-
-  clickZone.forEach((zone) => {
-    // adds touch feedback on click:
-    const showRipple = (e) => {
-      const ripple = document.createElement("div");
-      ripple.classList.add("touch-feedback");
-
-      const rect = zone.getBoundingClientRect();
-      const x = (e.touches?.[0]?.clientX ?? e.clientX) - rect.left;
-      const y = (e.touches?.[0]?.clientY ?? e.clientY) - rect.top;
-
-      ripple.style.left = `${x}px`;
-      ripple.style.top = `${y}px`;
-
-      zone.appendChild(ripple);
-      setTimeout(() => ripple.remove(), 400);
-    };
-
-    zone.addEventListener("click", (e) => {
-      showRipple(e);
-      // counter logic:
-      const user = zone.dataset.user;
-      const part = zone.dataset.part;
-      const points = defaultPoints[part] || 0;
-      if (!(part in defaultPoints)) {
-        alert("this one does not count!");
+// ---- UNCLICK BUTTON (remove points) ----------------------------------
+document.addEventListener("click", (e) => {
+  if (e.target && e.target.classList.contains("unclick")) {
+    e.preventDefault();
+    const dropdown = document.querySelector("select");
+    const selectedPart = dropdown.value;
+    const partCell = document.getElementById(`${selectedPart}-${currentUser}`);
+    const partNameCell = document.getElementById(`${selectedPart}`);
+    if (partCell && partNameCell) {
+      const currentPoints = parseInt(partCell.textContent) || 0;
+      const pointsToRemove = defaultPoints[selectedPart] || 0;
+      clickCounts[currentUser][selectedPart] -= 1;
+      if (currentPoints >= pointsToRemove && clickCounts[currentUser][selectedPart] > 0) {
+        partCell.textContent = currentPoints - pointsToRemove;
+        console.log(`current points for ${selectedPart}: ${currentPoints}`);
+        console.log(`points to remove for ${selectedPart}: ${pointsToRemove}`);
+        console.log(`-${pointsToRemove} points removed from ${selectedPart}!`);
+        totalScores[currentUser] -= pointsToRemove;
+        console.log(`New score: ${totalScores[currentUser]}`)
+        document.getElementById(`total-score-${currentUser}`).textContent = totalScores[currentUser];
+      } else if (currentPoints < pointsToRemove) {
+        console.log(`Not enough points to remove from ${selectedPart}.`);
       }
-
-      const partId = `${part}-${user}`;
-      const partCell = document.getElementById(partId);
-      if (partCell) {
-        const current = parseInt(partCell.textContent) || 0;
-        partCell.textContent = current + points;
-      }
-
-      totalScores[user] += points;
-      const totalCell = document.getElementById(`total-score-${user}`);
-      if (totalCell) {
-        totalCell.textContent = totalScores[user];
-      }
-
-      showFloatingScore(e, points);
-    });
-  });
+    }
+  }
+});
 });
