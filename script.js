@@ -14,8 +14,6 @@ const defaultPoints = {
 const userPartsMap = {};
 const totalScores = {};
 const clickCounts = {};
-const clickHistory = {};
-const lastComboTime = {};
 
 // ---- RETRIEVE AND INITIALIZE USERS AND THEIR BODY PARTS --------------
 clickZones.forEach(zone => {
@@ -24,7 +22,6 @@ clickZones.forEach(zone => {
   if (!userPartsMap[user]) userPartsMap[user] = new Set();
   userPartsMap[user].add(part);
   totalScores[user] = 0;
-  clickHistory[user] = [];
   if (!clickCounts[user]) clickCounts[user] = {};
   clickCounts[user][part] = 0;
 });
@@ -39,25 +36,29 @@ const createElement = (type, properties = {}) => {
 // ---- CREATE SCORE SECTION (TABLE AND UNCLICK DROPDOWN) FOR A USER ----
 const createScoreForUser = (user) => {
   if (createdUsers.has(user)) return console.log(`Welcome back ${user}!`);
-  // Sets the table:
+
+  // Creates the table:
   const scoreTable = createElement("table", { id: `score-table-${user}`, className: "score-table" });
   scoreTable.innerHTML = `
     <thead><tr><th>Body parts</th><th>Points</th></tr></thead>
     <tbody id="score-body-${user}"></tbody>
   `;
-  // Sets the unclick (points removal) form:
+
+  // Creates the unclick (points removal) form:
   const form = createElement("form", { 
     id: `unclick-${user}`, 
-    className: "unclick-section",
+    className: "unclick-section"
   });
   form.innerHTML = `
     <p style="color: #f0bd64;">Over-C-licked? Pick a value to remove licks:</p>
     <select></select>
-    <button class="unclick">Remove</button>
+    <button class="unclick-btn" type="submit">Remove</button>
   `;
+
   // Retrieves element from the table and the form to be worked on:
   const scoreBody = scoreTable.querySelector("tbody");
   const dropdown = form.querySelector("select");
+
   // Creates a row / option for each body part (and user):
   userPartsMap[user].forEach(part => {
     const row = createElement("tr");
@@ -69,6 +70,7 @@ const createScoreForUser = (user) => {
     const unclickOption = createElement("option", { value: part, textContent: part });
     dropdown.appendChild(unclickOption);
   });
+
   // Sets total score:
   const totalRow = createElement("tr");
   totalRow.innerHTML = `
@@ -76,7 +78,30 @@ const createScoreForUser = (user) => {
     <td id="total-score-${user}" class="score">0</td>
   `;
   scoreBody.appendChild(totalRow);
-  // Adds all the above and creates the user:
+
+  // Makes the unclick / remove points button works:
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const selectedPart = dropdown.value;
+    const partCell = document.getElementById(`${selectedPart}-${user}`);
+    const currentPartPoints = parseInt(partCell.textContent);
+    const pointsToRemove = defaultPoints[selectedPart];
+    if (currentPartPoints >= pointsToRemove){
+      console.log(`Current points for this part: ${currentPartPoints}`)
+      console.log(`Current score: ${totalScores[user]}`)
+      console.log(`to remove: ${pointsToRemove}`)
+      partCell.textContent = currentPartPoints - pointsToRemove;
+      totalScores[user] -= pointsToRemove;
+      console.log(`Updated points for this part: ${currentPartPoints}`)
+      console.log(`New score: ${totalScores[user]}`)
+      document.getElementById(`total-score-${user}`).textContent = totalScores[user];
+    }
+    else {
+      alert("You've not been licked there!")
+    }
+  });
+
+  // Loads all the above to the HTML and creates the user:
   document.getElementById("score-container").append(scoreTable, form);
   createdUsers.add(user);
   console.log(`Welcome to the game ${user}!`);
@@ -107,6 +132,7 @@ const goBack = () => {
   console.log(`Bye bye ${currentUser}!`);
   if (totalScores[currentUser]>0){
     console.log(`Current score: ${totalScores[currentUser]}!`);
+    console.log(clickCounts[currentUser]);
   }
   currentUser = null;
 };
@@ -134,42 +160,14 @@ const showFloatingScore = (e, points) => {
   setTimeout(() => bubble.remove(), 700);
 };
 
-// ---- COMBO SECTION (to be improved) ----------------------------------
-const handleCombo = (user, part, e) => {
-  const now = Date.now();
-  clickHistory[user].push({ part, time: now });
-  if (clickHistory[user].length > 10) clickHistory[user].shift();
-
-  const recent = clickHistory[user].slice(-3);
-  if (
-    recent.length === 3 &&
-    recent.every(entry => entry.part === part) &&
-    (recent[2].time - recent[0].time) <= 1000 &&
-    (now - lastComboTime[user]) >= 300
-  ) {
-    lastComboTime[user] = now;
-    const comboBubble = createElement("div", { className: "floating-score combo", textContent: "LICK ATTACK! x3" });
-    const faceContainer = document.getElementById(`face-${user}`);
-    comboBubble.style.position = "absolute";
-    comboBubble.style.left = "40%";
-    comboBubble.style.top = "30%";
-    comboBubble.style.transform = "translate(-50%, -50%)";
-    faceContainer.appendChild(comboBubble);
-    setTimeout(() => comboBubble.remove(), 1000);
-  }
-};
-
-// ---- ADD EVENT LISTENERS ---------------------------------------------
+// ---- 1 COUNTER UPDATE FUNTION ----------------------------------------------
 clickZones.forEach(zone => {
   const user = zone.dataset.user;
   const part = zone.dataset.part;
   const points = defaultPoints[part] || 0;
-  
-// ---- COUNTER FUNTION -------------------------------------------------
   zone.addEventListener("click", (e) => {
     showRipple(e, zone);
     showFloatingScore(e, points);
-
     const partCell = document.getElementById(`${part}-${user}`);
     if (partCell) {
       const current = parseInt(partCell.textContent) || 0;
@@ -177,37 +175,7 @@ clickZones.forEach(zone => {
       clickCounts[user][part] += 1;
       console.log(`${user}: clicks for ${part}: ${clickCounts[user][part]}`);
     }
-
     totalScores[user] += points;
     document.getElementById(`total-score-${user}`).textContent = totalScores[user];
-
-    handleCombo(user, part, e);
   });
-  
-// ---- UNCLICK BUTTON (remove points) ----------------------------------
-document.addEventListener("click", (e) => {
-  if (e.target && e.target.classList.contains("unclick")) {
-    e.preventDefault();
-    const dropdown = document.querySelector("select");
-    const selectedPart = dropdown.value;
-    const partCell = document.getElementById(`${selectedPart}-${currentUser}`);
-    const partNameCell = document.getElementById(`${selectedPart}`);
-    if (partCell && partNameCell) {
-      const currentPoints = parseInt(partCell.textContent) || 0;
-      const pointsToRemove = defaultPoints[selectedPart] || 0;
-      clickCounts[currentUser][selectedPart] -= 1;
-      if (currentPoints >= pointsToRemove && clickCounts[currentUser][selectedPart] > 0) {
-        partCell.textContent = currentPoints - pointsToRemove;
-        console.log(`current points for ${selectedPart}: ${currentPoints}`);
-        console.log(`points to remove for ${selectedPart}: ${pointsToRemove}`);
-        console.log(`-${pointsToRemove} points removed from ${selectedPart}!`);
-        totalScores[currentUser] -= pointsToRemove;
-        console.log(`New score: ${totalScores[currentUser]}`)
-        document.getElementById(`total-score-${currentUser}`).textContent = totalScores[currentUser];
-      } else if (currentPoints < pointsToRemove) {
-        console.log(`Not enough points to remove from ${selectedPart}.`);
-      }
-    }
-  }
-});
 });
