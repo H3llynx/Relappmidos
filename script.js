@@ -95,6 +95,7 @@ const createScoreForUser = (user) => {
       console.log(`Updated points for this part: ${currentPartPoints}`)
       console.log(`New score: ${totalScores[user]}`)
       document.getElementById(`total-score-${user}`).textContent = totalScores[user];
+      clickCounts[user][selectedPart] -= 1;
     }
     else {
       alert("You've not been licked there!")
@@ -132,6 +133,7 @@ const goBack = () => {
   console.log(`Bye bye ${currentUser}!`);
   if (totalScores[currentUser]>0){
     console.log(`Current score: ${totalScores[currentUser]}!`);
+    console.log(`Licking history:`);
     console.log(clickCounts[currentUser]);
   }
   currentUser = null;
