@@ -10,23 +10,24 @@
     <main class="app">
          <!-- AVATAR PICKING SECTION : display: none once the user picked the avatar -->
         <div class="select-avatar">
-            <div class="title">
-                <h1>Lick-O-Meter</h1>
-                <h2>Your daily slurp tracker!</h2>
-            </div>
             <div class="sasha-mobile-device">
                 <img id="sasha-mobile" src="pix/sashou.png" alt="Sasha is ready for a lick attack" />
                 <!-- other img option: https://i.imghippo.com/files/RHp6928iIE.png -->
+            </div>
+            <div class="title">
+                <h1>Lick-O-Meter</h1>
+                <h2>Your daily slurp tracker!</h2>
             </div>
             <div class="container">
                 <p>Select your avatar:</p>
                 <div class="avatars-container">
                     <img onclick="selectUser('helene')" class="avatar-img" id="helene" src="pix/helene.png" alt="Helene" />
                     <img onclick="selectUser('jordi')" class="avatar-img" id="jordi" src="pix/jordi.png" alt="Jordi" />
-                    <img onclick="selectUser('pixie')" class="avatar-img" id="pixie" src="pix/pixie.png" alt="Jordi" />                
+                    <img onclick="selectUser('pixie')" class="avatar-img" id="pixie" src="pix/pixie.png" alt="Jordi" />          
                 </div>
             </div>
         </div>
+        <!-- FACES SECTION -->
         <div id="counter-face-container">
             <!-- FACES SECTION -->
             <div id="face-container">
@@ -73,6 +74,7 @@
                     <div class="click-zone muzzle-pixie" data-user="pixie" data-part="muzzle"></div>
                     <div class="click-zone left-whiskers-pixie" data-user="pixie" data-part="whiskers"></div>
                     <div class="click-zone right-whiskers-pixie" data-user="pixie" data-part="whiskers"></div>
+                    <div class="click-zone chin-pixie" data-user="pixie" data-part="chin"></div>
                 </div>
             </div>
             <!-- COUNTER SECTION (dynamic) -->

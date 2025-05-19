@@ -46,6 +46,28 @@
     }
 }
 
+@keyframes scale-in-out {
+    0% {
+        opacity: 0;
+        transform: scale(0.7);
+    }
+
+    30% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    80% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(0.7);
+    }
+}
+
 * {
     box-sizing: border-box;
     animation: appear 0.6s ease;
@@ -53,37 +75,58 @@
 
 html {
     font-size: 100%;
+    height: 100%;
     background-color: #222;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
 }
 
 body {
     width: 100%;
-    min-height: 100vh;
+    min-height: 100%;
     margin: 0;
-    padding: 0;
+    padding: 3%;
     background-image: url(pix/background1.png);
     background-size: cover;
     background-attachment: fixed;
-    background-position: left top 20%;
+    background-position: center top 20%;
     font-size: 1.2rem;
     color: #fff;
     font-family: 'Anton', sans-serif;
     font-weight: 700;
 }
 
+.video-container {
+    animation: scale-in-out 5s ease;
+    display: block;
+    position: absolute;
+    width: 90%;
+    right: 5%;
+    top: 10%;
+}
+
+.video-mobile {
+    border-radius: 50%;
+    border: 1px solid #222;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.8);
+    width: 100%;
+    max-width: 550px;
+    max-height: 550px;
+    height: auto;
+}
+
 .app {
     width: 100%;
-    height: auto;
-    padding: 3%;
+    padding: 0;
+    margin: 0;
 }
 
 .select-avatar {
     padding: 0;
     margin: 0;
     width: 500px;
-    height: auto;
-    display: flex;
-    flex-direction: column;
+    height: 100%;
 }
 
 .title {
@@ -120,7 +163,7 @@ h2 {
 
 .container {
     width: 100%;
-    padding: 10px 30px 40px 30px;
+    padding: 1% 5% 6% 5%;
     background-color: #5e9ca0;
     /* other option: #578b8a */
     border-bottom-left-radius: 25px;
@@ -151,17 +194,26 @@ p {
     display: flex;
     flex-direction: row;
     width: 100%;
-    justify-content: space-between;
+    height: auto;
+    justify-content: left;
+    align-items: center;
     flex-wrap: wrap;
 }
 
 .avatar-img {
-    width: 140px;
+    cursor: pointer;
+    width: 31%;
     height: auto;
+    margin-right: 3.5%;
+    object-fit: contain;
     border-radius: 15px;
     border: 1px solid #222;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.8);
     transition: all 0.2s ease-in-out;
+}
+
+.avatar-img:nth-child(3) {
+    margin-right: 0;
 }
 
 .avatar-img:hover {
@@ -535,15 +587,15 @@ tbody {
 }
 
 .muzzle-pixie {
-    top: 52%;
-    left: 47%;
+    top: 50%;
+    left: 47.5%;
     width: 13%;
-    height: 16%;
+    height: 13%;
     border-bottom-left-radius: 60%;
     border-bottom-right-radius: 60%;
     border-top-left-radius: 20%;
     border-top-right-radius: 20%;
-    rotate: 10deg;
+    rotate: 5deg;
 }
 
 .left-whiskers-pixie {
@@ -568,6 +620,18 @@ tbody {
     rotate: -55deg;
 }
 
+.chin-pixie {
+    top: 63.2%;
+    left: 46%;
+    width: 13%;
+    height: 4.5%;
+    border-bottom-left-radius: 60%;
+    border-bottom-right-radius: 60%;
+    border-top-left-radius: 20%;
+    border-top-right-radius: 20%;
+    rotate: 3deg;
+}
+
 #counter-face-container {
     display: flex;
     width: 100%;
@@ -575,14 +639,16 @@ tbody {
     padding: 0;
     margin: 0;
     justify-content: space-between;
-    align-items: top;
+    align-items: flex-start;
     flex-direction: row-reverse;
 }
 
 #back-button-container {
+    display: none;
     width: auto;
     height: auto;
-    padding-top: 30px;
+    padding: 30px 0 0 0;
+
 }
 
 #back-button {
@@ -662,20 +728,20 @@ select {
     width: 30%;
 }
 
-@media only screen and (max-width: 1300px) {
+@media only screen and (max-width: 1130px) {
+    html {
+        font-size: 90%;
+    }
+
     .counter {
         width: 450px;
     }
 }
 
-@media only screen and (max-width: 1080px) {
-    body {
-        background-position: center top 0%;
-    }
 
-    .avatars-container {
-        gap: 20px;
-        justify-content: left;
+@media only screen and (max-width: 1070px) {
+    h1 {
+        line-height: 1.6;
     }
 
     #counter-face-container {
@@ -685,6 +751,7 @@ select {
 
     .counter {
         width: 100%;
+        max-width: 550px;
         max-height: unset;
         margin: auto;
     }
@@ -698,11 +765,6 @@ select {
         margin-bottom: 30px;
     }
 
-    #back-button-container {
-        padding-top: 30px;
-        padding-bottom: 30px;
-    }
-
     #back-button {
         margin: auto;
         width: 80%;
@@ -711,12 +773,49 @@ select {
 }
 
 @media only screen and (max-width: 600px) {
-    .app {
+    html {
+        font-size: 95%;
+    }
+
+    body {
+        background-image: url(pix/background2.png);
+        background-position: center center;
         padding-top: 6%;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    p {
+        text-align: center;
+    }
+
+    .app {
+        max-height: 100%;
+    }
+
+    .select-avatar .title {
+        border-radius: 25px;
+        border: 4px solid #222;
+        padding: 2% 0;
+    }
+
+    .select-avatar .container {
+        padding: 0 2%;
+        background-color: unset;
+        border: 0;
+        box-shadow: unset;
     }
 
     .select-avatar {
         width: 100%;
+        height: 100%;
+    }
+
+    .select-avatar img {
+        width: 32%;
+        margin-right: 2%;
     }
 
     .touch-feedback {
@@ -727,63 +826,30 @@ select {
     .floating-score {
         font-size: 1.6rem;
     }
-}
-
-@media only screen and (max-width: 500px) {
-    body {
-        background-image: url(pix/background2.png);
-        background-position: center top;
-    }
-
-    .app {
-        padding: 6% 3% 0 3%;
-    }
-
-    h2 {
-        font-size: 1.5rem;
-    }
-
-    .select-avatar {
-        margin-bottom: 0;
-    }
-
-    .avatars-container {
-        width: 100%;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    p {
-        text-align: center;
-    }
-
-    .avatar-img {
-        width: 100%;
-    }
 
     .sasha-mobile-device {
         display: block;
         width: 100%;
-        margin-top: 10px;
     }
 
     .sasha-mobile-device img {
         display: block;
-        width: 80%;
+        width: 66%;
         margin: auto;
         height: auto;
         filter: drop-shadow(0px 2px 6px rgba(0, 0, 0, 0.6));
     }
 
-    .select-avatar .title {
-        border-bottom-left-radius: 25px;
-        border-bottom-right-radius: 25px;
-        border-bottom: 4px solid #222;
-    }
+    #back-button-container {
+        padding-bottom: 30px;
 
-    .select-avatar .container {
-        border-top-left-radius: 25px;
-        border-top-right-radius: 25px;
-        border-top: 4px solid #222;
+    }
+}
+
+
+@media only screen and (max-width: 500px) {
+
+    h2 {
+        font-size: 1.5rem;
     }
 }
