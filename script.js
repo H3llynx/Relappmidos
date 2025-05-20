@@ -16,6 +16,34 @@ const userPartsMap = {};
 const totalScores = {};
 const clickCounts = {};
 
+// ---- DYNAMIC BACKGROUND DEPENDING ON TIME ----------------------------
+    const now = new Date();
+    const hour = now.getHours();
+    let dynamicBackgroundImg;
+    let backgroundFolder;
+    if (window.matchMedia("(max-width: 600px)").matches){
+      backgroundFolder = "mobile";
+    }
+    else {backgroundFolder = "desktop";}
+    if (hour >= 7 && hour < 11) {
+      dynamicBackgroundImg = `url(pix/${backgroundFolder}/morning.png)`;
+    }
+    else if (hour >= 11 && hour < 19) {
+      dynamicBackgroundImg = `url(pix/${backgroundFolder}/day.png)`;
+    }
+    else if (hour >= 19 && hour < 22) {
+      dynamicBackgroundImg = `url(pix/${backgroundFolder}/sunset.png)`;
+    }
+    else {
+      dynamicBackgroundImg = `url(pix/${backgroundFolder}/morning.png)`;
+    }
+    if (window.matchMedia("(max-width: 600px)").matches) {
+      document.body.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), ${dynamicBackgroundImg}`
+    }
+    else {
+      document.body.style.backgroundImage = `${dynamicBackgroundImg}`
+    }
+
 // ---- RETRIEVE AND INITIALIZE USERS AND THEIR BODY PARTS --------------
 clickZones.forEach(zone => {
   const user = zone.dataset.user;
@@ -126,39 +154,28 @@ const selectUser = (user) => {
 // ---- GO BACK BUTTON --------------------------------------------------
 const goBack = () => {
   if (currentUser) {
-
-  // mobile device animation only in vertical (portrait) orientation:
-  if (/Mobi|Android|iPhone/i.test(navigator.userAgent) && !/iPad/i.test(navigator.userAgent) &&
-  (window.matchMedia("(orientation: portrait)").matches || window.innerHeight > window.innerWidth)) {
-    const videoContainer = createElement("div", { className: "video-container" });
-    const video = createElement("video", { 
-      src: "vidx/sashita.mp4", 
-      autoplay: true,
-      muted: true,
-      playsInline: true,
-      className: "video-mobile"
-    });
-    const goodbye = createElement("h1", {
-      textContent: `Bye Bye ${currentUser.charAt(0).toUpperCase() + currentUser.slice(1)}`
-    });
-    Object.assign(goodbye.style, {
-      animation: "scale-in-out 5s ease",
-      position: "absolute",
-      zIndex: 4,
-      bottom: "10%",
-      left: "22%",
-      transform: "translate(-50%, 0)",
-      color: "#5e9ca0",
-      margin: 0,
-      textAlign: "center",
-      width: "max-content"
-    });
-    videoContainer.appendChild(video);
-    videoContainer.appendChild(goodbye);
-    document.body.appendChild(videoContainer);
-    setTimeout(() => videoContainer.remove(), 5000)
-  }
-  ///
+    // goodbye animation
+    if (!/iPad/i.test(navigator.userAgent)) { // excluding iPad due to compatibility issue with video file
+      const videoContainer = createElement("div", { className: "video-container" });
+      const video = createElement("video", { 
+        src: "vidx/sasha.mov", 
+        autoplay: true,
+        muted: true,
+        playsInline: true,
+        className: "video-mobile"
+      });
+      const goodbye = createElement("h1", {
+        innerHTML: `<h1> Bye Bye ${currentUser.charAt(0).toUpperCase() + currentUser.slice(1)}!<h1><h2>Current score: ${totalScores[currentUser]}</h2>`,
+        className: "goodbye-title"
+      });
+      videoContainer.appendChild(video);
+      videoContainer.appendChild(goodbye);
+      document.body.appendChild(videoContainer);
+      setTimeout(() => {
+        videoContainer.remove();
+      }, 4000);
+    }
+  //
     document.getElementById(`face-${currentUser}`).style.display = "none";
     document.getElementById(`unclick-${currentUser}`).style.display = "none";
     counter.style.display = "none";
