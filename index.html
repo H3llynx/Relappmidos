@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <main class="app">
+    <main>
          <!-- AVATAR PICKING SECTION : display: none once the user picked the avatar -->
         <div class="select-avatar">
             <!-- <div class="sasha-mobile-device"> <-- not to be used while dynamic js background works
@@ -21,9 +21,9 @@
             <div class="container">
                 <p>Select your avatar:</p>
                 <div class="avatars-container">
-                    <img onclick="selectUser('helene')" class="avatar-img" id="helene" src="pix/helene.png" alt="Helene" />
-                    <img onclick="selectUser('jordi')" class="avatar-img" id="jordi" src="pix/jordi.png" alt="Jordi" />
-                    <img onclick="selectUser('pixie')" class="avatar-img" id="pixie" src="pix/pixie.png" alt="Jordi" />          
+                    <img onclick="selectUser('helene')" class="avatar-img" id="helene" src="pix/helene.png" alt="Helene, human" role="button" tabindex="0" />
+                    <img onclick="selectUser('jordi')" class="avatar-img" id="jordi" src="pix/jordi.png" alt="Jordi, human" role="button" tabindex="0" />
+                    <img onclick="selectUser('pixie')" class="avatar-img" id="pixie" src="pix/pixie.png" alt="Pixie, cat" role="button" tabindex="0" />          
                 </div>
             </div>
         </div>
@@ -33,48 +33,60 @@
             <div id="face-container">
                 <!-- HELENE -->
                 <div id="face-helene" class="face">
-                    <img id="face-img-helene" src="pix/helene.png" alt="Helene's face" />
+                    <img class="face-img" id="face-img-helene" src="pix/helene.png" alt="Helene's face" />
                     <h2 class="user-instructions">Click a body part to score points</h2>
-                    <div class="click-zone forehead-helene" data-user="helene" data-part="forehead"></div>
-                    <div class="click-zone left-eye-helene" data-user="helene" data-part="eyes"></div>
-                    <div class="click-zone right-eye-helene" data-user="helene" data-part="eyes"></div>
-                    <div class="click-zone ear-helene" data-user="helene" data-part="ears"></div>
-                    <div class="click-zone nose-helene" data-user="helene" data-part="nose"></div>
-                    <div class="click-zone left-cheek-helene" data-user="helene" data-part="cheeks"></div>
-                    <div class="click-zone right-cheek-helene" data-user="helene" data-part="cheeks"></div>
-                    <div class="click-zone chin-helene" data-user="helene" data-part="chin"></div>
-                    <div class="click-zone mouth-helene" data-user="helene" data-part="mouth"></div>
-                    <div class="click-zone neck-helene" data-user="helene" data-part="neck"></div>
+                    <div class="click-zone forehead-helene" data-user="helene" data-part="forehead" role="button" tabindex="0" aria-label="Click to select Helene's forehead"></div>
+                    <div class="click-zone left-eye-helene" data-user="helene" data-part="eyes" role="button" tabindex="0" aria-label="Click to select Helene's left eye"></div>
+                    <div class="click-zone right-eye-helene" data-user="helene" data-part="eyes" role="button" tabindex="0" aria-label="Click to select Helene's right eye"></div>
+                    <div class="click-zone ear-helene" data-user="helene" data-part="ears" role="button" tabindex="0" aria-label="Click to select Helene's ears"></div>
+                    <div class="click-zone nose-helene" data-user="helene" data-part="nose" role="button" tabindex="0" aria-label="Click to select Helene's nose"></div>
+                    <div class="click-zone left-cheek-helene" data-user="helene" data-part="cheeks" role="button" tabindex="0" aria-label="Click to select Helene's left cheek"></div>
+                    <div class="click-zone right-cheek-helene" data-user="helene" data-part="cheeks" role="button" tabindex="0" aria-label="Click to select Helene's right cheek"></div>
+                    <div class="click-zone chin-helene" data-user="helene" data-part="chin" role="button" tabindex="0" aria-label="Click to select Helene's chin"></div>
+                    <div class="mouth-zone mouth-helene" onclick="openMouthOptions()" role="button" tabindex="0" aria-label="Click to select open's mouth">
+                        <div class="container_mouth" id="mouth-options-helene">
+                            <img class="click-zone" id="closed-mouth-helene" data-user="helene" data-part="mouth" src="pix/body/helene/closed_mouth.png" alt="Helene's closed mouth" role="button" tabindex="0" aria-label="Click to select Helene's closed mouth"/>
+                            <img class="click-zone" id="open-mouth-helene"  data-user="helene" data-part="mouth (open)" src="pix/body/helene/open_mouth.png" alt="Helene's open mouth" role="button" tabindex="0" aria-label="Click to select Helene's open mouth"/>
+                        </div>
+                    </div>
+                    <div class="click-zone neck-helene" data-user="helene" data-part="neck" role="button" tabindex="0" aria-label="Click to select Helene's neck"></div>
                 </div>
                 <!-- JORDI -->
                 <div id="face-jordi" class="face">
-                    <img id="face-img-jordi" src="pix/jordi.png" alt="Jordi's face" />
+                    <img class="face-img" id="face-img-jordi" src="pix/jordi.png" alt="Jordi's face" />
                     <h2 class="user-instructions">Click a body part to score points</h2>
-                    <div class="click-zone forehead-jordi" data-user="jordi" data-part="forehead"></div>
-                    <div class="click-zone left-eye-jordi" data-user="jordi" data-part="eyes"></div>
-                    <div class="click-zone right-eye-jordi" data-user="jordi" data-part="eyes"></div>
-                    <div class="click-zone left-ear-jordi" data-user="jordi" data-part="ears"></div>
-                    <div class="click-zone right-ear-jordi" data-user="jordi" data-part="ears"></div>
-                    <div class="click-zone nose-jordi" data-user="jordi" data-part="nose"></div>
-                    <div class="click-zone left-cheek-jordi" data-user="jordi" data-part="cheeks"></div>
-                    <div class="click-zone right-cheek-jordi" data-user="jordi" data-part="cheeks"></div>
-                    <div class="click-zone beard-jordi" data-user="jordi" data-part="beard"></div>
-                    <div class="click-zone mouth-jordi" data-user="jordi" data-part="mouth"></div>
-                    <div class="click-zone neck-jordi" data-user="jordi" data-part="neck"></div>
+                    <div class="click-zone forehead-jordi" data-user="jordi" data-part="forehead" role="button" tabindex="0" aria-label="Click to select Jordi's forehead"></div>
+                    <div class="click-zone left-eye-jordi" data-user="jordi" data-part="eyes" role="button" tabindex="0" aria-label="Click to select Jordi's left eye"></div>
+                    <div class="click-zone right-eye-jordi" data-user="jordi" data-part="eyes" role="button" tabindex="0" aria-label="Click to select Jordi's right eye"></div>
+                    <div class="click-zone left-ear-jordi" data-user="jordi" data-part="ears" role="button" tabindex="0" aria-label="Click to select Jordi's left ear"></div>
+                    <div class="click-zone right-ear-jordi" data-user="jordi" data-part="ears" role="button" tabindex="0" aria-label="Click to select Jordi's right ear"></div>
+                    <div class="click-zone nose-jordi" data-user="jordi" data-part="nose" role="button" tabindex="0" aria-label="Click to select Jordi's nose"></div>
+                    <div class="click-zone left-cheek-jordi" data-user="jordi" data-part="cheeks" role="button" tabindex="0" aria-label="Click to select Jordi's left cheek"></div>
+                    <div class="click-zone right-cheek-jordi" data-user="jordi" data-part="cheeks" role="button" tabindex="0" aria-label="Click to select Jordi's right cheek"></div>
+                    <div class="click-zone left-beard-jordi" data-user="jordi" data-part="beard" role="button" tabindex="0" aria-label="Click to select Jordi's beard (left side)"></div>
+                    <div class="click-zone right-beard-jordi" data-user="jordi" data-part="beard" role="button" tabindex="0" aria-label="Click to select Jordi's beard (right side)"></div>
+                    <div class="mouth-zone mouth-jordi" onclick="openMouthOptions()" data-user="jordi" data-part="mouth" role="button" tabindex="0" aria-label="Click to select Jordi's mouth">
+                        <div class="container_mouth" id="mouth-options-jordi">
+                            <img class="click-zone" id="closed-mouth-jordi" data-user="jordi" data-part="mouth" src="pix/body/jordi/closed_mouth.png" alt="Jordi's closed mouth" role="button" tabindex="0" aria-label="Click to select Jordi's closed mouth"/>
+                            <img class="click-zone" id="open-mouth-jordi"  data-user="jordi" data-part="mouth (open)" src="pix/body/jordi/open_mouth.png" alt="Jordi's open mouth" role="button" tabindex="0" aria-label="Click to select Jordi's open mouth"/>
+                        </div>
+                    </div>
+                    <div class="click-zone neck-jordi" data-user="jordi" data-part="neck" role="button" tabindex="0" aria-label="Click to select Jordi's non sweaty neck"></div>
+                    <div class="click-zone sweaty-neck-jordi" data-user="jordi" data-part="neck (sweaty)" role="button" tabindex="0" aria-label="Click to select Jordi's sweaty neck"></div>
                 </div>
                 <!-- PIXIE -->
                 <div id="face-pixie" class="face">
-                    <img id="face-img-jordi" src="pix/pixie.png" alt="Jordi's face" />
+                    <img class="face-img" id="face-img-pixie" src="pix/pixie.png" alt="Pixie's face" />
                     <h2 class="user-instructions">Click a body part to score points</h2>
-                    <div class="click-zone forehead-pixie" data-user="pixie" data-part="forehead"></div>
-                    <div class="click-zone left-ear-pixie" data-user="pixie" data-part="ears"></div>
-                    <div class="click-zone right-ear-pixie" data-user="pixie" data-part="ears"></div>
-                    <div class="click-zone left-eye-pixie" data-user="pixie" data-part="eyes"></div>
-                    <div class="click-zone right-eye-pixie" data-user="pixie" data-part="eyes"></div>
-                    <div class="click-zone muzzle-pixie" data-user="pixie" data-part="muzzle"></div>
-                    <div class="click-zone left-whiskers-pixie" data-user="pixie" data-part="whiskers"></div>
-                    <div class="click-zone right-whiskers-pixie" data-user="pixie" data-part="whiskers"></div>
-                    <div class="click-zone chin-pixie" data-user="pixie" data-part="chin"></div>
+                    <div class="click-zone forehead-pixie" data-user="pixie" data-part="forehead" role="button" tabindex="0" aria-label="Click to select Pixie's forehead"></div>
+                    <div class="click-zone left-ear-pixie" data-user="pixie" data-part="ears" role="button" tabindex="0" aria-label="Click to select Pixie's left ear"></div>
+                    <div class="click-zone right-ear-pixie" data-user="pixie" data-part="ears" role="button" tabindex="0" aria-label="Click to select Pixie's right ear"></div>
+                    <div class="click-zone left-eye-pixie" data-user="pixie" data-part="eyes" role="button" tabindex="0" aria-label="Click to select Pixie's left eye"></div>
+                    <div class="click-zone right-eye-pixie" data-user="pixie" data-part="eyes" role="button" tabindex="0" aria-label="Click to select Pixie's right eye"></div>
+                    <div class="click-zone muzzle-pixie" data-user="pixie" data-part="muzzle" role="button" tabindex="0" aria-label="Click to select Pixie's muzzle"></div>
+                    <div class="click-zone left-whiskers-pixie" data-user="pixie" data-part="whiskers" role="button" tabindex="0" aria-label="Click to select Pixie's left whiskers"></div>
+                    <div class="click-zone right-whiskers-pixie" data-user="pixie" data-part="whiskers" role="button" tabindex="0" aria-label="Click to select Pixie's right whiskers"></div>
+                    <div class="click-zone chin-pixie" data-user="pixie" data-part="chin" role="button" tabindex="0" aria-label="Click to select Pixie's chin"></div>
                 </div>
             </div>
             <!-- COUNTER SECTION (dynamic) -->
@@ -90,9 +102,14 @@
         </div>
         <!-- BACK BUTTON -->
         <div id="back-button-container">
-            <button id="back-button" onclick="goBack()">Back</button>
+            <button id="back-button" onclick="goBack()" tabindex="0">Back</button>
         </div>
     </main>
+<footer>
+  <span>Made with 💛 by <a href="https://github.com/H3llynx" target="_blank">H3llynx</a></span>
+  <span>Relamidos from</span><span role="img" aria-label="Canary Islands">🇮🇨</span><span>to the world</span>
+  <span>© 2025</span>
+</footer>
     <script src="script.js"></script>
   </body>
 </html>

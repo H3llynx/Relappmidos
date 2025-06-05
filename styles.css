@@ -15,6 +15,24 @@
     border: 2px solid #222;
 }
 
+@keyframes bubble-in {
+    0% {
+        transform: scale(0) translateY(0);
+    }
+
+    60% {
+        transform: scale(1.1) translateY(-8px);
+    }
+
+    80% {
+        transform: scale(0.95) translateY(-5px);
+    }
+
+    100% {
+        transform: scale(1) translateY(-5px);
+    }
+}
+
 @keyframes fade-in {
 
     0% {
@@ -82,17 +100,53 @@ html {
 }
 
 body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     width: 100%;
     min-height: 100%;
     margin: 0;
-    padding: 3%;
+    padding: 0;
     background-size: cover;
     background-attachment: fixed;
     background-position: center center;
     font-size: 1.2rem;
     color: #fff;
     font-family: 'Anton', sans-serif;
-    font-weight: 700;
+}
+
+footer {
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 1em 0em;
+    color: #7a8f89;
+    text-shadow: 1px 1px 0 black,
+        -1px -1px 0 black,
+        1px -1px 0 black,
+        -1px 1px 0 black;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: clamp(0.7rem, 2vw, 0.9rem);
+}
+
+span {
+    padding: 0 5px;
+}
+
+span:first-child {
+    border-right: 1px solid #7a8f89;
+    ;
+}
+
+span:last-child {
+    border-left: 1px solid #222;
+    ;
+}
+
+a {
+    color: #e2c49a;
+    text-decoration: none;
 }
 
 h1,
@@ -115,6 +169,18 @@ h1 {
 
 h2 {
     font-size: 1.8rem;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 .video-container {
@@ -157,10 +223,11 @@ h2 {
     color: #e4a434;
 }
 
-.app {
+main {
     width: 100%;
-    padding: 0;
-    margin: 0;
+    max-width: 1200px;
+    padding: 3%;
+    margin: 0 auto;
 }
 
 .select-avatar {
@@ -251,7 +318,6 @@ p {
     padding: 0;
     margin: 0;
     width: 500px;
-    max-height: 505px;
     display: none;
 }
 
@@ -263,10 +329,10 @@ p {
 #score-container {
     background: #384d4b;
     height: auto;
-    max-height: 100%;
-    overflow-Y: auto;
+    max-height: 500px;
+    overflow-y: scroll;
     padding-top: 0;
-    padding-bottom: 0;
+    padding-bottom: 6%;
 }
 
 table {
@@ -315,7 +381,7 @@ tbody {
     margin: 0;
 }
 
-#face-container img {
+.face-img {
     width: 100%;
     display: block;
     border-radius: 15px;
@@ -323,7 +389,8 @@ tbody {
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.8);
 }
 
-.click-zone {
+.click-zone,
+.mouth-zone {
     position: absolute;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
@@ -349,6 +416,34 @@ tbody {
     width: 100%;
     margin: auto;
     bottom: 3%;
+}
+
+.container_mouth {
+    display: none;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    animation: bubble-in 1s ease-in forwards;
+    position: absolute;
+    background-color: #222;
+    width: 150%;
+    height: auto;
+    padding: 0;
+    border-radius: 8px;
+    border: 1px solid #222;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.8);
+
+}
+
+.container_mouth img {
+    position: relative;
+    width: 49%;
+    height: auto;
+    border-radius: 5px;
+    border: 1px solid #222;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.8);
+    transition: all 0.2s ease-in-out;
+    object-fit: contain;
 }
 
 /* HELENE: */
@@ -406,6 +501,10 @@ tbody {
     rotate: 8deg;
     border-radius: 60%;
     z-index: 2;
+}
+
+#mouth-options-helene {
+    rotate: -8deg;
 }
 
 .left-cheek-helene {
@@ -514,6 +613,11 @@ tbody {
     z-index: 2;
 }
 
+#mouth-options-jordi {
+    rotate: 6deg;
+    left: -15%;
+}
+
 .left-cheek-jordi {
     top: 41%;
     left: 25.8%;
@@ -535,26 +639,48 @@ tbody {
     rotate: -8deg;
 }
 
-.beard-jordi {
-    top: 51%;
-    left: 29%;
-    width: 38%;
-    height: 17%;
-    border-bottom-left-radius: 60%;
+.left-beard-jordi {
+    top: 57%;
+    left: 23%;
+    width: 26%;
+    height: 9%;
+    border-bottom-left-radius: 80%;
     border-bottom-right-radius: 60%;
-    rotate: -13deg;
+    rotate: 33deg;
     z-index: 1;
+    opacity: 0.4;
+}
+
+.right-beard-jordi {
+    top: 53%;
+    left: 39%;
+    width: 32%;
+    height: 11%;
+    border-bottom-left-radius: 40%;
+    border-bottom-right-radius: 90%;
+    rotate: -35deg;
+    z-index: 1;
+    opacity: 0.4;
 }
 
 .neck-jordi {
-    top: 56%;
-    left: 33%;
-    width: 37.5%;
-    height: 20%;
-    rotate: -14deg;
-    border-top-left-radius: 40%;
+    top: 57%;
+    left: 35%;
+    width: 20%;
+    height: 23%;
+    rotate: -10deg;
     border-bottom-left-radius: 40%;
-    border-bottom-right-radius: 40%;
+    z-index: 0;
+}
+
+.sweaty-neck-jordi {
+    opacity: 0.4;
+    top: 51%;
+    left: 54%;
+    width: 15%;
+    height: 26%;
+    rotate: -10deg;
+    border-bottom-right-radius: 70%;
     z-index: 0;
 }
 
@@ -716,16 +842,8 @@ button:active {
     z-index: 2;
 }
 
-.floating-score.combo {
-    color: gold;
-    font-weight: bold;
-    font-size: 1.5rem;
-    text-shadow: 1px 1px 2px black;
-}
-
 form {
     width: 100%;
-    padding-bottom: 30px;
 }
 
 select {
@@ -744,6 +862,34 @@ select {
 .unclick-btn {
     display: inline;
     width: 30%;
+}
+
+select:focus {
+    outline: 2px solid #d78e3a;
+    appearance: none;
+    box-shadow: none;
+}
+
+button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 2px 2px black, 0px 0px 80px #e4a434;
+}
+
+[role="button"]:focus-visible {
+    border-radius: 50%;
+    outline: 2px solid whitesmoke;
+}
+
+.avatars-container [role="button"]:focus-visible {
+    border-radius: 15px;
+    outline: none;
+    filter: brightness(120%) drop-shadow(0 0 8px rgba(0, 0, 0, 0.8));
+}
+
+.container_mouth [role="button"]:focus-visible {
+    border-radius: 5px;
+    outline: none;
+    filter: brightness(120%) drop-shadow(0 0 8px rgba(0, 0, 0, 0.8));
 }
 
 @media only screen and (max-width: 1130px) {
@@ -769,11 +915,11 @@ select {
     .counter {
         width: 100%;
         max-width: 550px;
-        max-height: unset;
         margin: auto;
     }
 
     #score-container {
+        max-height: unset;
         overflow-Y: visible;
     }
 
@@ -859,6 +1005,10 @@ select {
 
     .floating-score {
         font-size: 1.6rem;
+    }
+
+    .container_mouth {
+        width: 200%;
     }
 
     /*
