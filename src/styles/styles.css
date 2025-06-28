@@ -115,40 +115,6 @@ body {
     font-family: 'Anton', sans-serif;
 }
 
-footer {
-    font-size: 0.9rem;
-    text-align: center;
-    padding: 1em 0em;
-    color: #7a8f89;
-    text-shadow: 1px 1px 0 black,
-        -1px -1px 0 black,
-        1px -1px 0 black,
-        -1px 1px 0 black;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: clamp(0.7rem, 2vw, 0.9rem);
-}
-
-span {
-    padding: 0 5px;
-}
-
-span:first-child {
-    border-right: 1px solid #7a8f89;
-    ;
-}
-
-span:last-child {
-    border-left: 1px solid #222;
-    ;
-}
-
-a {
-    color: #e2c49a;
-    text-decoration: none;
-}
-
 h1,
 h2 {
     color: #fff;
@@ -892,6 +858,53 @@ button:focus-visible {
     filter: brightness(120%) drop-shadow(0 0 8px rgba(0, 0, 0, 0.8));
 }
 
+.overlay {
+    position: "fixed";
+    left: 0;
+    top: 0;
+    width: 100%;
+    min-height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    animation: unset;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+footer {
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 1em 0em;
+    color: #7a8f89;
+    text-shadow: 1px 1px 0 black,
+        -1px -1px 0 black,
+        1px -1px 0 black,
+        -1px 1px 0 black;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: clamp(0.7rem, 2vw, 0.9rem);
+}
+
+span {
+    padding: 0 5px;
+}
+
+span:first-child {
+    border-right: 1px solid #7a8f89;
+    ;
+}
+
+span:last-child {
+    border-left: 1px solid #222;
+    ;
+}
+
+a {
+    color: #e2c49a;
+    text-decoration: none;
+}
+
 @media only screen and (max-width: 1130px) {
     html {
         font-size: 90%;
@@ -920,7 +933,7 @@ button:focus-visible {
 
     #score-container {
         max-height: unset;
-        overflow-Y: visible;
+        overflow-y: visible;
     }
 
     #face-container {
@@ -1010,21 +1023,6 @@ button:focus-visible {
     .container_mouth {
         width: 200%;
     }
-
-    /*
-    .sasha-mobile-device {
-        display: block;
-        width: 100%;
-    }
-
-    .sasha-mobile-device img {
-        display: block;
-        width: 55%;
-        margin: auto;
-        height: auto;
-        filter: drop-shadow(0px 2px 6px rgba(0, 0, 0, 0.6));
-    }
-        */
 }
 
 
