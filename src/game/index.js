@@ -9,11 +9,10 @@ const mouthZones = document.querySelectorAll(".mouth-zone");
 const users = document.querySelectorAll(".user");
 const counter = document.querySelector(".counter");
 const avatars = document.querySelectorAll(".avatar-img");
-const srStatus = document.querySelector(".sr-status");
+const srStatus = document.getElementById("sr-status");
 const overlay = document.querySelector(".overlay");
 
 let currentUser = null;
-
 const createdUsers = new Set();
 
 const userPartsMap = {};
@@ -120,7 +119,7 @@ const createScoreForUser = (user) => {
 // ---- AVATAR SELECTION ------------------------------------------------
 const registerSelectUserEvent = () => {
   users.forEach((userOption) =>
-    userOption.addEventListener("click", (option) => {
+    userOption.addEventListener("click", () => {
       const user = userOption.id;
       currentUser = user;
       avatars.forEach((img) => {
