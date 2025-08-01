@@ -905,6 +905,11 @@ a {
     text-decoration: none;
 }
 
+button img {
+    display: none;
+    vertical-align: middle;
+}
+
 @media only screen and (max-width: 1130px) {
     html {
         font-size: 90%;
@@ -943,11 +948,10 @@ a {
 
     #back-button-container {
         padding: 5% 0;
-
+        justify-content: center;
     }
 
     #back-button {
-        margin: auto;
         width: 80%;
         max-width: 500px;
     }
@@ -1023,8 +1027,44 @@ a {
     .container_mouth {
         width: 200%;
     }
-}
 
+
+    main {
+        display: flex;
+        flex-direction: column-reverse;
+        padding: 0;
+    }
+
+    #counter-face-container,
+    .select-avatar {
+        padding: 3%;
+    }
+
+    #back-button-container {
+        padding: 0;
+    }
+
+    #back-button {
+        border-radius: 0;
+        width: 100%;
+        max-width: unset;
+        padding: 15px 30px;
+        border-left: 0;
+        border-right: 0;
+        font-size: 1.8rem;
+        text-align: left;
+    }
+
+    #back-button:hover {
+        transform: none;
+    }
+
+    button img {
+        display: inline-block;
+        width: 50px;
+        margin-right: 20px;
+    }
+}
 
 @media only screen and (max-width: 500px) {
 

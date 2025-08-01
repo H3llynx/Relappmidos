@@ -102,10 +102,8 @@ const createScoreForUser = (user) => {
         totalScores[user];
       clickCounts[user][selectedPart] -= 1;
       srStatus.textContent = `You are removing: ${selectedPart}, which represents ${pointsToRemove} points. Your total score is now ${totalScores[currentUser]}`;
-      console.log(srStatus.textContent);
     } else {
       srStatus.textContent = "You've not been licked there!";
-      console.log(srStatus.textContent);
       alert("You've not been licked there!");
     }
   });
@@ -131,7 +129,7 @@ const registerSelectUserEvent = () => {
       });
       srStatus.textContent = `You are playing with ${user}.`;
       selectAvatar.style.display = "none";
-      backButtonContainer.style.display = "block";
+      backButtonContainer.style.display = "flex";
       backButton.style.display = "block";
       document.getElementById(`face-${user}`).style.display = "block";
       counter.style.display = "block";
@@ -152,7 +150,6 @@ const registerGoBackEvent = () => {
       srStatus.textContent = `Thank you for playing with Sasha and ${currentUser}! \
       Your current total score is: ${totalScores[currentUser]}.\
       We hope to see you again soon. You will now be redirected to the avatar selection area.`;
-      console.log(srStatus.textContent);
       if (!/iPad/i.test(navigator.userAgent)) {
         // 👆 excluding iPad due to compatibility issue with my iPad and the video file
         const videoContainer = createElement("div", {
@@ -234,7 +231,6 @@ const registerOpenMouthEvents = () => {
     zone.addEventListener('click', () => {
       srStatus.textContent =
         "Click or press Tab to chose closed or open mouth.";
-      console.log(srStatus.textContent);
       const mouthContainer = document.getElementById(
         `mouth-options-${currentUser}`
       );
@@ -288,7 +284,6 @@ const registerClickZonesEvents = () => {
       document.getElementById(`total-score-${currentUser}`).textContent =
         totalScores[currentUser];
       srStatus.textContent = `You selected: ${part}, which scores ${points}. Your total score is now ${totalScores[currentUser]}`;
-      console.log(srStatus.textContent);
     });
   });
 }
