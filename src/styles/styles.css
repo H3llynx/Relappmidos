@@ -92,7 +92,7 @@
 
 html {
     font-size: 100%;
-    height: 100vh;
+    height: 100dvh;
     background-color: #222;
     margin: 0;
     padding: 0;
@@ -1035,9 +1035,12 @@ button img {
         padding: 0;
     }
 
-    #counter-face-container,
-    .select-avatar {
+    #counter-face-container {
         padding: 3%;
+    }
+
+    .select-avatar {
+        padding: 0 3% 3% 3%;
     }
 
     #back-button-container {
@@ -1048,7 +1051,7 @@ button img {
         border-radius: 0;
         width: 100%;
         max-width: unset;
-        padding: 15px 30px;
+        padding: 9px 30px;
         border-left: 0;
         border-right: 0;
         font-size: 1.8rem;
@@ -1061,8 +1064,8 @@ button img {
 
     button img {
         display: inline-block;
-        width: 50px;
-        margin-right: 20px;
+        width: 40px;
+        margin-right: 10px;
     }
 }
 
