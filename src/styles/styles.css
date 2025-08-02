@@ -1036,7 +1036,7 @@ button img {
     }
 
     #counter-face-container {
-        padding: 3%;
+        padding: 5% 3%;
     }
 
     .select-avatar {
@@ -1045,6 +1045,9 @@ button img {
 
     #back-button-container {
         padding: 0;
+        position: sticky;
+        top: 0;
+        width: 100%;
     }
 
     #back-button {

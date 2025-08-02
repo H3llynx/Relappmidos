@@ -180,6 +180,7 @@ const registerGoBackEvent = () => {
         setTimeout(() => {
           videoContainer.remove();
         }, 4000);
+        videoContainer.addEventListener("click", () => videoContainer.remove());
       }
       document.getElementById(`face-${currentUser}`).style.display = "none";
       document.getElementById(`unclick-${currentUser}`).style.display = "none";
@@ -197,7 +198,6 @@ const registerGoBackEvent = () => {
     }
     currentUser = null;
   });
-
 };
 
 // ---- FACE CLICK VISUAL FEEDBACK --------------------------------------
