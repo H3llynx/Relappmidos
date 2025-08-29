@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Relappmidos - Login</title>
+    <link rel="stylesheet" href="./src/styles/styles.css" />
+    <link rel="stylesheet" href="./src/styles/account.css" />
+    <link rel="icon" href="assets/favicon.ico">
+</head>
+
+<body>
+    <main>
+        <form id="loginForm">
+            <h1>Login</h1>
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit" tabindex="0">Login</button>
+        </form>
+        <div class="reg-invite">
+            <div class="box" data-box="register">
+                <div class="inside">
+                    <h2>No account?</h2>
+                    <p>Sasha’s waiting to drool on you.</p>
+                    <a href="register.html" role="button" class="button" tabindex="0">Register</a>
+                </div>
+                <img src="./assets/img/register_sasha.png" class="right-img" />
+            </div>
+            <div class="box" data-box="guest">
+                <div class="inside">
+                    <h3>Too cool to sign up?</h3>
+                    <p>Pixie will let you in as a guest… just don’t mess with her nap schedule.</p>
+                    <button id="play-as-guest" tabindex="0" class="no-full-width">Play as guest</button>
+                </div>
+                <img src="./assets/img/invite_pixie.png" class="right-img" />
+            </div>
+        </div>
+    </main>
+    <footer>
+        <span>Made with 💛 by <a href="https://github.com/H3llynx" target="_blank">H3llynx</a></span>
+        <span>Relamidos from</span><span role="img" aria-label="Canary Islands">🇮🇨</span><span>to the world</span>
+        <span>© 2025</span>
+    </footer>
+    <script src="./src/account/login.js"></script>
+</body>
+
+</html>

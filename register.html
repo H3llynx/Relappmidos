@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Relappmidos - Register</title>
+    <link rel="stylesheet" href="./src/styles/styles.css" />
+    <link rel="stylesheet" href="./src/styles/account.css" />
+    <link rel="icon" href="assets/favicon.ico">
+</head>
+
+<body>
+    <form id="registerForm">
+        <h1>Register</h1>
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <p class="error-validation"></p>
+        <div class="flex-container">
+            <img id="captchaImage" alt="Captcha loading...">
+            <button id="reloadCaptcha" type="button" class="no-full-width" tabindex="0" aria-label="Reload captcha"><img
+                    src="assets/img/svg/reload.svg" alt="" /></button>
+        </div>
+        <input type="text" name="captcha" placeholder="Enter captcha" required>
+        <div class="flex-container">
+            <label for="user-type">You will play as a:</label>
+            <select id="user-type" name="user-type">
+                <option value="human">human</option>
+                <option value="cat">cat</option>
+            </select>
+        </div>
+        <input type="checkbox" id="agreement" name="agreement" checked>
+        <label for="agreement">I hereby consent to being
+            Sasha’s official slobber target.</label>
+        <div class="flex-container">
+            <button type="submit" tabindex="0">Register</button>
+            <a href="login.html" tabindex="0" class="button" role="button"><img src="./assets/img/back.png"
+                    class="arrows" />Back</a>
+        </div>
+    </form>
+    </main>
+    <footer>
+        <span>Made with 💛 by <a href="https://github.com/H3llynx" target="_blank">H3llynx</a></span>
+        <span>Relamidos from</span><span role="img" aria-label="Canary Islands">🇮🇨</span><span>to the world</span>
+        <span>© 2025</span>
+    </footer>
+    <div class="overlay">
+        <div class="box" data-box="success" role="alert">
+            <div class="inside">
+                <h3>Registration successful!</h3>
+                <p>You will be redirected to the game.</br>Get ready for a lick shower!</p>
+            </div>
+            <img src="./assets/img/laying_sasha.png" alt="" class="right-img" />
+        </div>
+        <div id="error400" class="box" data-box="error" role="alertdialog" aria-modal="true"
+            aria-labelledby="400-error-title" aria-describedby="error400-msg">
+            <button class="closeButton no-full-width" tabindex="0" aria-label="Close"><img
+                    src="assets/img/svg/close.svg" alt="" /></button>
+            <div class="inside">
+                <h3 id="400-error-title">Bad request...</h3>
+                <p id="error400-msg"></p>
+            </div>
+            <img src="./assets/img/shower.png" class="right-img" />
+        </div>
+        <div id="fetch-error" class="box" data-box="error" role="alertdialog" aria-modal="true"
+            aria-labelledby="500-error-title" aria-describedby="error500-msg">
+            <button class="closeButton no-full-width" tabindex="0" aria-label="Close"><img
+                    src="assets/img/svg/close.svg" alt="" /></button>
+            <div class="inside">
+                <h3 id="500-error-title">Error Detected</h3>
+                <p id="error500-msg">If you’re offline, go pet your router. If you’re online, that’s on us and we’ll
+                    patch it
+                    up faster than Sasha finds a slobber target.</p>
+            </div>
+            <img src="./assets/img/pixie_cables.png" class="right-img" />
+        </div>
+        <div class="box" data-box="uncheck" role="alertdialog" aria-modal="true" aria-labelledby="uncheck-title"
+            aria-describedby="uncheck-msg">
+            <button autofocus class="closeButton no-full-width" tabindex="0" aria-label="Close"><img
+                    src="assets/img/svg/close.svg" alt="" /></button>
+            <div class="inside">
+                <h3 id="uncheck-title">You think this is optional?</h3>
+                <p id="uncheck-msg">Cute. But Sasha doesn’t negotiate with mortals. Slurp is inevitable.</p>
+            </div>
+            <img src="./assets/img/laying_sasha.png" class="right-img" />
+        </div>
+    </div>
+    <script src="./src/account/register.js"></script>
+</body>
+
+</html>

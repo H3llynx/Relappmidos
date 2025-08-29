@@ -4,10 +4,10 @@ const initTimedBackground = () => {
   const hour = now.getHours();
   let dynamicBackgroundImg;
   let backgroundFolder;
-  if (window.matchMedia("(max-width: 600px)").matches){
+  if (window.matchMedia("(max-width: 600px)").matches) {
     backgroundFolder = "mobile";
   }
-  else {backgroundFolder = "desktop";}
+  else { backgroundFolder = "desktop"; }
   if (hour >= 5 && hour < 7) {
     dynamicBackgroundImg = `url(assets/img/${backgroundFolder}/early_morning.png)`;
   }
