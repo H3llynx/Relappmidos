@@ -15,7 +15,7 @@ const loadCaptcha = async () => {
         console.error("Error loading captcha:", error);
     }
 }
-//loadCaptcha();
+loadCaptcha();
 document.getElementById("reloadCaptcha").addEventListener("click", loadCaptcha);
 
 
