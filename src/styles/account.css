@@ -14,7 +14,7 @@
 
 :root {
     --bg-gradient: linear-gradient(90deg, rgba(0, 0, 0, 0.6), transparent);
-    --bg-image: url(/assets/img/desktop/login.png);
+    --bg-image: url(./assets/img/desktop/login.png);
 }
 
 body {
