@@ -7,7 +7,7 @@
     <title>Relappmidos</title>
     <link rel="stylesheet" href="./src/styles/styles.css" />
     <link rel="stylesheet" href="./src/styles/game.css" />
-    <link rel="icon" href="assets/favicon.ico">
+    <link rel="icon" href="./assets/favicon.ico">
 </head>
 
 <body>
@@ -24,11 +24,11 @@
                     <button class="button no-full-width" id="logout" type="button" tabindex="0">Logout</button>
                 </div>
                 <div class="avatars-container">
-                    <img class="avatar-img" id="helene" src="assets/img/helene.png" alt="Helene, human" role="button"
+                    <img class="avatar-img" id="helene" src="./assets/img/helene.png" alt="Helene, human" role="button"
                         tabindex="0" />
-                    <img class="avatar-img" id="jordi" src="assets/img//jordi.png" alt="Jordi, human" role="button"
+                    <img class="avatar-img" id="jordi" src="./assets/img//jordi.png" alt="Jordi, human" role="button"
                         tabindex="0" />
-                    <img class="avatar-img" id="pixie" src="assets/img//pixie.png" alt="Pixie, cat" role="button"
+                    <img class="avatar-img" id="pixie" src="./assets/img//pixie.png" alt="Pixie, cat" role="button"
                         tabindex="0" />
                 </div>
                 <button id="add-avatar" class="button" type="button" tabindex="0">Add avatar</button>
@@ -38,11 +38,11 @@
         <div class="box" data-box="camera" role="dialog" aria-modal="true" aria-label="Avatar creation features">
             <div class="inside">
                 <button class="closeButton no-full-width" tabindex="0" aria-label="Close"><img
-                        src="assets/img/svg/close.svg" alt="" /></button>
+                        src="./assets/img/svg/close.svg" alt="" /></button>
                 <button tabindex="0" id="startCamera" class="cam no-full-width" aria-label="Enable Camera"><img
-                        src="assets/img/svg/enable-cam.svg" alt=""></button>
+                        src="./assets/img/svg/enable-cam.svg" alt=""></button>
                 <button tabindex="0" id="stopCamera" class="cam no-full-width" aria-label="Stop Camera"><img
-                        src="assets/img/svg/disable-cam.svg" alt=""></button>
+                        src="./assets/img/svg/disable-cam.svg" alt=""></button>
                 <button tabindex="0" id="takePicture" class="no-full-width" aria-label="Take picture">Take
                     Picture</button>
                 <button tabindex="0" id="retrievePicture" class="no-full-width" aria-label="Download picture">Use
@@ -61,7 +61,7 @@
             <div id="face-container">
                 <!-- HELENE -->
                 <div id="face-helene" class="face">
-                    <img class="face-img" id="face-img-helene" src="assets/img/helene.png" alt="Helene's face" />
+                    <img class="face-img" id="face-img-helene" src="./assets/img/helene.png" alt="Helene's face" />
                     <h2 class="user-instructions">Click a body part to score points</h2>
                     <div class="click-zone forehead-helene" data-user="helene" data-part="forehead" role="button"
                         tabindex="0" aria-label="Click to select Helene's forehead"></div>
@@ -83,10 +83,10 @@
                         aria-label="Click to select open's mouth">
                         <div class="container_mouth" id="mouth-options-helene">
                             <img class="click-zone" id="closed-mouth-helene" data-user="helene" data-part="mouth"
-                                src="assets/img//body/helene/closed_mouth.png" alt="Helene's closed mouth" role="button"
-                                tabindex="0" aria-label="Click to select Helene's closed mouth" />
+                                src="./assets/img//body/helene/closed_mouth.png" alt="Helene's closed mouth"
+                                role="button" tabindex="0" aria-label="Click to select Helene's closed mouth" />
                             <img class="click-zone" id="open-mouth-helene" data-user="helene" data-part="mouth (open)"
-                                src="assets/img//body/helene/open_mouth.png" alt="Helene's open mouth" role="button"
+                                src="./assets/img//body/helene/open_mouth.png" alt="Helene's open mouth" role="button"
                                 tabindex="0" aria-label="Click to select Helene's open mouth" />
                         </div>
                     </div>
@@ -95,7 +95,7 @@
                 </div>
                 <!-- JORDI -->
                 <div id="face-jordi" class="face">
-                    <img class="face-img" id="face-img-jordi" src="assets/img//jordi.png" alt="Jordi's face" />
+                    <img class="face-img" id="face-img-jordi" src="./assets/img//jordi.png" alt="Jordi's face" />
                     <h2 class="user-instructions">Click a body part to score points</h2>
                     <div class="click-zone forehead-jordi" data-user="jordi" data-part="forehead" role="button"
                         tabindex="0" aria-label="Click to select Jordi's forehead"></div>
@@ -121,10 +121,10 @@
                         aria-label="Click to select Jordi's mouth">
                         <div class="container_mouth" id="mouth-options-jordi">
                             <img class="click-zone" id="closed-mouth-jordi" data-user="jordi" data-part="mouth"
-                                src="assets/img//body/jordi/closed_mouth.png" alt="Jordi's closed mouth" role="button"
+                                src="./assets/img//body/jordi/closed_mouth.png" alt="Jordi's closed mouth" role="button"
                                 tabindex="0" aria-label="Click to select Jordi's closed mouth" />
                             <img class="click-zone" id="open-mouth-jordi" data-user="jordi" data-part="mouth (open)"
-                                src="assets/img//body/jordi/open_mouth.png" alt="Jordi's open mouth" role="button"
+                                src="./assets/img//body/jordi/open_mouth.png" alt="Jordi's open mouth" role="button"
                                 tabindex="0" aria-label="Click to select Jordi's open mouth" />
                         </div>
                     </div>
@@ -135,7 +135,7 @@
                 </div>
                 <!-- PIXIE -->
                 <div id="face-pixie" class="face">
-                    <img class="face-img" id="face-img-pixie" src="assets/img//pixie.png" alt="Pixie's face" />
+                    <img class="face-img" id="face-img-pixie" src="./assets/img//pixie.png" alt="Pixie's face" />
                     <h2 class="user-instructions">Click a body part to score points</h2>
                     <div class="click-zone forehead-pixie" data-user="pixie" data-part="forehead" role="button"
                         tabindex="0" aria-label="Click to select Pixie's forehead"></div>
