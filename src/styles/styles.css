@@ -149,6 +149,7 @@ p {
 .overlay.visible {
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
     cursor: pointer;
 }
 
@@ -238,9 +239,9 @@ button:focus-visible,
 
 #back-button:focus-visible,
 .flex-container .button:focus-visible {
-    outline: none;
+    outline: 2px solid whitesmoke;
     background: #384d4b;
-    font-size: 2rem;
+    font-size: 1.6rem;
 }
 
 .overlay:focus-visible {
@@ -313,13 +314,23 @@ button:focus-visible,
     left: 0;
 }
 
-.box[data-box="camera"] {
-    display: none;
+dialog {
+    padding: 0;
+    background: transparent;
+    border: none;
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
+    overflow: visible;
+}
+
+dialog:focus-visible {
+    outline: none;
+}
+
+dialog::backdrop {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.box[data-box="camera"] {
     background: url(../../assets/img/photoshoot.png);
     background-size: cover;
     background-position: 35%;
@@ -515,7 +526,7 @@ button:focus-visible,
     }
 
     .box[data-box="camera"] {
-        width: 90%;
+        width: 100%;
 
         & button:not(.closeButton) {
             padding: 0.3rem 0.8rem;
@@ -531,5 +542,11 @@ button:focus-visible,
         &:hover {
             transform: none;
         }
+    }
+
+    #back-button:focus-visible,
+    .flex-container .button:focus-visible {
+        outline: none;
+        font-size: 2rem;
     }
 }

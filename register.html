@@ -44,16 +44,17 @@
         <span>Relamidos from</span><span role="img" aria-label="Canary Islands">🇮🇨</span><span>to the world</span>
         <span>© 2025</span>
     </footer>
-    <div class="overlay">
-        <div class="box" data-box="success" role="alert">
+    <dialog id="success">
+        <div class="box" data-box="success">
             <div class="inside">
                 <h3>Registration successful!</h3>
                 <p>You will be redirected to the game.</br>Get ready for a lick shower!</p>
             </div>
             <img src="./assets/img/laying_sasha.png" alt="" class="right-img" />
         </div>
-        <div id="error400" class="box" data-box="error" role="alertdialog" aria-modal="true"
-            aria-labelledby="400-error-title" aria-describedby="error400-msg">
+    </dialog>
+    <dialog id="error400" aria-labelledby="400-error-title" aria-describedby="error400-msg">
+        <div class="box" data-box="error">
             <button class="closeButton no-full-width" tabindex="0" aria-label="Close"><img
                     src="assets/img/svg/close.svg" alt="" /></button>
             <div class="inside">
@@ -62,8 +63,9 @@
             </div>
             <img src="./assets/img/shower.png" class="right-img" />
         </div>
-        <div id="fetch-error" class="box" data-box="error" role="alertdialog" aria-modal="true"
-            aria-labelledby="500-error-title" aria-describedby="error500-msg">
+    </dialog>
+    <dialog id="fetch-error" aria-labelledby="500-error-title" aria-describedby="error500-msg">
+        <div class="box" data-box="error">
             <button class="closeButton no-full-width" tabindex="0" aria-label="Close"><img
                     src="./assets/img/svg/close.svg" alt="" /></button>
             <div class="inside">
@@ -74,8 +76,9 @@
             </div>
             <img src="./assets/img/pixie_cables.png" class="right-img" />
         </div>
-        <div class="box" data-box="uncheck" role="alertdialog" aria-modal="true" aria-labelledby="uncheck-title"
-            aria-describedby="uncheck-msg">
+    </dialog>
+    <dialog id="uncheck" aria-labelledby="uncheck-title" aria-describedby="uncheck-msg">
+        <div class="box" data-box="uncheck">
             <button autofocus class="closeButton no-full-width" tabindex="0" aria-label="Close"><img
                     src="./assets/img/svg/close.svg" alt="" /></button>
             <div class="inside">
@@ -84,7 +87,7 @@
             </div>
             <img src="./assets/img/laying_sasha.png" class="right-img" />
         </div>
-    </div>
+    </dialog>
     <script src="./src/account/register.js"></script>
 </body>
 

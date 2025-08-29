@@ -111,19 +111,16 @@ label {
 }
 
 .box[data-box="success"] {
-    display: none;
     animation: bubble-in 1s ease-in forwards;
     background: #222;
 }
 
 .box[data-box="error"] {
-    display: none;
     animation: bubble-in 1s ease-in forwards;
     background: #384d4b;
 }
 
 .box[data-box="uncheck"] {
-    display: none;
     animation: bubble-in 1s ease-in forwards;
     background: #3c2222;
 }

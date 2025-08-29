@@ -8,6 +8,7 @@ const stopCam = document.getElementById("stopCamera");
 const usePic = document.getElementById("retrievePicture");
 const sendBtn = document.getElementById("sendPicture");
 const instructions = document.getElementById("picture-instructions");
+const dialog = document.querySelector("dialog");
 
 const photoClean = () => {
     photo.src = ""
@@ -26,12 +27,9 @@ const init = () => {
 
 const showPopup = () => {
     createAvatarBtn.addEventListener("click", () => {
-        document.querySelector(".overlay").classList.add("visible");
-        document.querySelector('.box[data-box="camera"]').style.display = "flex";
+        dialog.showModal();
         photoClean();
         init();
-        popupBox.addEventListener("keydown", trapFocus);
-        if (focusable.length) focusable[0].focus();
     })
 };
 
@@ -77,7 +75,7 @@ const stopCamera = () => {
         startCam.style.display = "block";
         shoot.style.display = "none";
         stopCam.style.display = "none";
-    })
+    });
 };
 
 const takePicture = () => {
@@ -95,7 +93,7 @@ const takePicture = () => {
         instructions.style.color = "#e4a434";
         instructions.classList.toggle("visible", true);
         stopStream();
-    })
+    });
 };
 
 const getPicture = () => {
@@ -138,38 +136,17 @@ const sendPictureToDev = () => {
 const exit = () => {
     stopStream();
     photoClean();
-    const box = document.querySelector(".box");
-    box.style.display === "flex" ? (box.style.display = "none") : null
-    const overlay = document.querySelector(".overlay");
-    overlay.classList.remove("visible");
+    dialog.close();
     instructions.classList.toggle("visible", false);
 }
 
 const exitPopupEvents = () => {
     document.querySelector(".closeButton").addEventListener("click", exit);
-    document.querySelector(".overlay").addEventListener("click", exit)
-};
-
-// FOCUS MANAGEMENT (KEYBOARD NAVIGATION):
-const popupBox = document.querySelector('.box[data-box="camera"]');
-const focusable = popupBox.querySelectorAll("button");
-if (focusable.length) focusable[0].focus();
-const trapFocus = (e) => {
-    if (e.key === "Escape") {
-        popupBox.removeEventListener("keydown", trapFocus);
-        exit();
-        return;
-    }
-    else if (e.key !== "Tab" && e.key !== "Escape") return;
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-    if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-    } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-    }
+    dialog.addEventListener("click", (e) => {
+        if (e.target === dialog) {
+            exit();
+        }
+    });
 };
 
 export default () => {

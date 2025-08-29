@@ -35,26 +35,29 @@
             </div>
         </div>
         <!-- ADD AVATAR SECTION -->
-        <div class="box" data-box="camera" role="dialog" aria-modal="true" aria-label="Avatar creation features">
-            <div class="inside">
-                <button class="closeButton no-full-width" tabindex="0" aria-label="Close"><img
-                        src="./assets/img/svg/close.svg" alt="" /></button>
-                <button tabindex="0" id="startCamera" class="cam no-full-width" aria-label="Enable Camera"><img
-                        src="./assets/img/svg/enable-cam.svg" alt=""></button>
-                <button tabindex="0" id="stopCamera" class="cam no-full-width" aria-label="Stop Camera"><img
-                        src="./assets/img/svg/disable-cam.svg" alt=""></button>
-                <button tabindex="0" id="takePicture" class="no-full-width" aria-label="Take picture">Take
-                    Picture</button>
-                <button tabindex="0" id="retrievePicture" class="no-full-width" aria-label="Download picture">Use
-                    picture</button>
-                <button tabindex="0" id="sendPicture" class="no-full-width" aria-label="Send your picture">✉️ Send us
-                    your picture</button>
+        <dialog aria-label="Avatar creation features">
+            <div class="box" data-box="camera">
+                <div class="inside">
+                    <button autofocus class="closeButton no-full-width" tabindex="0" aria-label="Close"><img
+                            src="./assets/img/svg/close.svg" alt="" /></button>
+                    <button tabindex="0" id="startCamera" class="cam no-full-width" aria-label="Enable Camera"><img
+                            src="./assets/img/svg/enable-cam.svg" alt=""></button>
+                    <button tabindex="0" id="stopCamera" class="cam no-full-width" aria-label="Stop Camera"><img
+                            src="./assets/img/svg/disable-cam.svg" alt=""></button>
+                    <button tabindex="0" id="takePicture" class="no-full-width" aria-label="Take picture">Take
+                        Picture</button>
+                    <button tabindex="0" id="retrievePicture" class="no-full-width" aria-label="Download picture">Use
+                        picture</button>
+                    <button tabindex="0" id="sendPicture" class="no-full-width" aria-label="Send your picture">✉️ Send
+                        us
+                        your picture</button>
+                </div>
+                <video id="videoElement" autoplay playsinline></video>
+                <canvas id="canvas" style="display:none;"></canvas>
+                <img id="photo" alt="Captured image will appear here." />
+                <h2 id="picture-instructions">Make sure to allow access to your camera.</h2>
             </div>
-            <video id="videoElement" autoplay playsinline></video>
-            <canvas id="canvas" style="display:none;"></canvas>
-            <img id="photo" alt="Captured image will appear here." />
-            <h2 id="picture-instructions">Make sure to allow access to your camera.</h2>
-        </div>
+        </dialog>
         <!-- GAME SECTION -->
         <div id="counter-face-container">
             <!-- FACES SECTION -->

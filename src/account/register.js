@@ -15,7 +15,7 @@ const loadCaptcha = async () => {
         console.error("Error loading captcha:", error);
     }
 }
-loadCaptcha();
+//loadCaptcha();
 document.getElementById("reloadCaptcha").addEventListener("click", loadCaptcha);
 
 
@@ -82,23 +82,20 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
                 } else {
                     alertMessage = "Something went wrong. Please try again later.";
                 }
-                document.querySelector(".overlay").classList.add("visible");
                 const box = document.getElementById("error400");
                 document.getElementById("error400-msg").textContent = alertMessage;
                 pop(box);
                 return;
             } else {
-                document.querySelector(".overlay").classList.add("visible");
-                document.querySelector('.box[data-box="success"]').style.display = "flex";
+                const box = document.getElementById("success");
+                pop(box);
                 setTimeout(() => {
-                    document.querySelector(".overlay").classList.remove("visible");
-                    document.querySelector('.box[data-box="success"]').style.display = "none";
+                    closeAlert(box);
                     window.location.href = "login.html";
                 }, 3000);
             };
         } catch (error) {
             console.error('Network / Fetch error :', error);
-            document.querySelector(".overlay").classList.add("visible");
             const box = document.getElementById("fetch-error");
             pop(box);
         };
@@ -108,53 +105,36 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
 // Uncheck slurp agreement attempt:
 document.getElementById("agreement").addEventListener("change", e => {
     if (!e.target.checked) {
-        document.querySelector(".overlay").classList.add("visible");
-        const box = document.querySelector('.box[data-box="uncheck"]');
+        const box = document.getElementById("uncheck");
         pop(box);
         setTimeout(() => { e.target.checked = true; }, 1500)
     }
 })
 
-const boxes = document.querySelectorAll(".box");
-const overlay = document.querySelector(".overlay");
 
 // Pop alerts:
 const pop = (box) => {
-    box.style.display = "flex";
-    setTimeout(() => {
-        focusHandler(box);
-    }, 1000);
+    box.showModal();
 }
 
 // Close alerts:
-const closeAlert = () => {
-    boxes.forEach(box => box.style.display === "flex" ? (box.style.display = "none") : null)
-    overlay.classList.remove("visible");
-}
+const closeAlert = (box) => {
+    box.close();
+};
 
-document.querySelectorAll(".closeButton").forEach(button => {
-    button.addEventListener("click", closeAlert)
+document.querySelectorAll("dialog").forEach(box => {
+    box.addEventListener("click", e => {
+        if (e.target === box) {
+            box.close();
+        }
+    });
 });
 
-document.querySelector(".overlay").addEventListener("click", e => {
-    if (e.target === e.currentTarget) closeAlert();
-})
-
-// FOCUS MANAGEMENT (KEYBOARD NAVIGATION):
-const focusHandler = (box) => {
-    const focusable = box.querySelector("button");
-    if (focusable) {
-        focusable.focus();
-        const trapFocus = (e) => {
-            if (e.key === "Escape") {
-                box.removeEventListener("keydown", trapFocus);
-                closeAlert();
-                return;
-            }
-            else if (e.key !== "Tab" && e.key !== "Escape") return;
-            e.preventDefault();
-            focusable.focus();
-        };
-        box.addEventListener("keydown", trapFocus);
-    }
-};
+document.querySelectorAll(".closeButton").forEach(button => {
+    button.addEventListener("click", (e) => {
+        const dialog = e.target.closest("dialog");
+        if (dialog) {
+            dialog.close();
+        }
+    });
+});
