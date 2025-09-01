@@ -138,6 +138,7 @@ const exit = () => {
     photoClean();
     dialog.close();
     instructions.classList.toggle("visible", false);
+    createAvatarBtn.blur();
 }
 
 const exitPopupEvents = () => {

@@ -1,21 +1,84 @@
 // ---- CAPTCHA -------------------
 let captchaId = ""
-const loadCaptcha = async () => {
-    try {
-        const response = await fetch("https://d63ojp7jad.execute-api.eu-west-1.amazonaws.com/prod/user/captcha");
-        captchaId = response.headers.get("x-captcha-id");
-        const blob = await response.blob();
-        const captchaImage = document.getElementById("captchaImage");
-        // Revoke old captcha if it exists:
-        if (captchaImage.src && captchaImage.src.startsWith("blob:")) {
-            URL.revokeObjectURL(captchaImage.src);
-        }
-        captchaImage.src = URL.createObjectURL(blob);
-    } catch (error) {
-        console.error("Error loading captcha:", error);
+
+// Avoid abusive captcha reloads:
+let dailyLimitReached = false;
+const maxCaptchaReloads = 5;
+const maxDailyReloads = 20;
+const reloadCooldown = 60000; // 1 minute
+let reloadTimestamps = JSON.parse(localStorage.getItem("reloadTimestamps")) || [];
+let reloads = Number(localStorage.getItem("reloads")) || 0;
+
+// Check daily reset:
+const checkDailyReset = () => {
+    const today = new Date().toDateString();
+    const savedDay = localStorage.getItem("lastVisitDay");
+    if (savedDay !== today) {
+        dailyLimitReached = false;
+        reloads = 0;
+        localStorage.setItem("reloads", reloads);
+        reloadTimestamps = [];
+        localStorage.setItem("lastVisitDay", today);
+        localStorage.setItem("reloadTimestamps", JSON.stringify(reloadTimestamps));
     }
 }
-loadCaptcha();
+checkDailyReset();
+
+// Loads captcha:
+const loadCaptcha = async (showAlert = true) => {
+    if (dailyLimitReached) {
+        if (showAlert) {
+            const box = document.getElementById("captcha-abuse");
+            document.getElementById("captcha-abuse-msg").textContent = "Too many CAPTCHA reloads for today. Try again tomorrow.";
+            pop(box);
+        }
+        return;
+    }
+    else {
+        const now = Date.now();
+        reloadTimestamps = reloadTimestamps.filter(time => now - time < reloadCooldown);
+
+        if (reloadTimestamps.length >= maxCaptchaReloads) {
+            if (showAlert) {
+                const box = document.getElementById("captcha-abuse");
+                document.getElementById("captcha-abuse-msg").textContent = "Too many CAPTCHA reloads, please wait a minute!";
+                pop(box);
+            }
+            return;
+        }
+        else if (reloads >= maxDailyReloads) {
+            dailyLimitReached = true;
+            if (showAlert) {
+                const box = document.getElementById("captcha-abuse");
+                document.getElementById("captcha-abuse-msg").textContent = "Too many CAPTCHA reloads for today. Try again tomorrow.";
+                pop(box);
+            }
+            return;
+        }
+        else {
+            reloads++
+            localStorage.setItem("reloads", reloads);
+            reloadTimestamps.push(now);
+            localStorage.setItem("reloadTimestamps", JSON.stringify(reloadTimestamps));
+
+            try {
+                const response = await fetch("https://d63ojp7jad.execute-api.eu-west-1.amazonaws.com/prod/user/captcha");
+                captchaId = response.headers.get("x-captcha-id");
+                const blob = await response.blob();
+                const captchaImage = document.getElementById("captchaImage");
+                // Revoke old captcha if it exists:
+                if (captchaImage.src && captchaImage.src.startsWith("blob:")) {
+                    URL.revokeObjectURL(captchaImage.src);
+                }
+                captchaImage.src = URL.createObjectURL(blob);
+            } catch (error) {
+                console.error("Error loading captcha:", error);
+            }
+        }
+    }
+}
+
+loadCaptcha(false);
 document.getElementById("reloadCaptcha").addEventListener("click", loadCaptcha);
 
 

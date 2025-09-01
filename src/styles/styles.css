@@ -235,6 +235,7 @@ button:focus-visible,
 
 .closeButton:focus-visible {
     background: whitesmoke;
+    box-shadow: 0 0 2px 2px black, 0px 0px 10px #e4a434;
 }
 
 #back-button:focus-visible,
@@ -242,10 +243,6 @@ button:focus-visible,
     outline: 2px solid whitesmoke;
     background: #384d4b;
     font-size: 1.6rem;
-}
-
-.overlay:focus-visible {
-    border: 5px solid whitesmoke;
 }
 
 .arrows {
@@ -358,8 +355,8 @@ dialog::backdrop {
     }
 
     & video {
-        width: 100%;
-        height: 100%;
+        width: 101%;
+        height: 101%;
         position: absolute;
         inset: 0;
         pointer-events: auto;

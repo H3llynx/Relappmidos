@@ -29,9 +29,11 @@
                 <option value="cat">cat</option>
             </select>
         </div>
-        <input type="checkbox" id="agreement" name="agreement" checked>
-        <label for="agreement">I hereby consent to being
-            Sasha’s official slobber target.</label>
+        <div class="flex-container">
+            <input type="checkbox" id="agreement" name="agreement" checked>
+            <label for="agreement">I hereby consent to being
+                Sasha’s official slobber target.</label>
+        </div>
         <div class="flex-container">
             <button type="submit" tabindex="0">Register</button>
             <a href="login.html" tabindex="0" class="button" role="button"><img src="./assets/img/back.png"
@@ -86,6 +88,17 @@
                 <p id="uncheck-msg">Cute. But Sasha doesn’t negotiate with mortals. Slurp is inevitable.</p>
             </div>
             <img src="./assets/img/laying_sasha.png" class="right-img" />
+        </div>
+    </dialog>
+    <dialog id="captcha-abuse" aria-labelledby="captcha-abuse-title" aria-describedby="captcha-abuse-msg">
+        <div class="box" data-box="error">
+            <button class="closeButton no-full-width" tabindex="0" aria-label="Close"><img
+                    src="assets/img/svg/close.svg" alt="" /></button>
+            <div class="inside">
+                <h3 id="captcha-abuse-title">Slow down!</h3>
+                <p id="captcha-abuse-msg"></p>
+            </div>
+            <img src="./assets/img/shower.png" class="right-img" />
         </div>
     </dialog>
     <script src="./src/account/register.js"></script>
