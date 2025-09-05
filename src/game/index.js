@@ -29,7 +29,7 @@ const clickCounts = {};
 
 const loggedInUser = localStorage.getItem("loggedInUser");
 if (!loggedInUser) {
-  window.location.href = 'login.html';
+  window.location.replace('login.html');
 } else if (loggedInUser === "pixie") {
   // guest mode: hide other avatars
   document.querySelectorAll(".avatar-img").forEach((img) => {
