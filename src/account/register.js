@@ -30,7 +30,7 @@ const loadCaptcha = async (showAlert = true) => {
         if (showAlert) {
             const box = document.getElementById("captcha-abuse");
             document.getElementById("captcha-abuse-msg").textContent = "Too many CAPTCHA reloads for today. Try again tomorrow.";
-            pop(box);
+            box.showModal();
         }
         return;
     }
@@ -42,7 +42,7 @@ const loadCaptcha = async (showAlert = true) => {
             if (showAlert) {
                 const box = document.getElementById("captcha-abuse");
                 document.getElementById("captcha-abuse-msg").textContent = "Too many CAPTCHA reloads, please wait a minute!";
-                pop(box);
+                box.showModal();
             }
             return;
         }
@@ -51,7 +51,7 @@ const loadCaptcha = async (showAlert = true) => {
             if (showAlert) {
                 const box = document.getElementById("captcha-abuse");
                 document.getElementById("captcha-abuse-msg").textContent = "Too many CAPTCHA reloads for today. Try again tomorrow.";
-                pop(box);
+                box.showModal();
             }
             return;
         }
@@ -147,20 +147,20 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
                 }
                 const box = document.getElementById("error400");
                 document.getElementById("error400-msg").textContent = alertMessage;
-                pop(box);
+                box.showModal();
                 return;
             } else {
                 const box = document.getElementById("success");
-                pop(box);
+                box.showModal();
                 setTimeout(() => {
-                    closeAlert(box);
+                    box.close();
                     window.location.href = "login.html";
                 }, 3000);
             };
         } catch (error) {
             console.error('Network / Fetch error :', error);
             const box = document.getElementById("fetch-error");
-            pop(box);
+            box.showModal();
         };
     }
 });
@@ -169,21 +169,10 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
 document.getElementById("agreement").addEventListener("change", e => {
     if (!e.target.checked) {
         const box = document.getElementById("uncheck");
-        pop(box);
+        box.showModal();
         setTimeout(() => { e.target.checked = true; }, 1500)
     }
 })
-
-
-// Pop alerts:
-const pop = (box) => {
-    box.showModal();
-}
-
-// Close alerts:
-const closeAlert = (box) => {
-    box.close();
-};
 
 document.querySelectorAll("dialog").forEach(box => {
     box.addEventListener("click", e => {

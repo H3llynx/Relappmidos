@@ -25,7 +25,7 @@
                     <p>Sasha’s waiting to drool on you.</p>
                     <a href="register.html" role="button" class="button" tabindex="0">Register</a>
                 </div>
-                <img src="./assets/img/register_sasha.png" class="right-img" />
+                <img src="./assets/img/register_sasha.webp" class="right-img" />
             </div>
             <div class="box" data-box="guest">
                 <div class="inside">
@@ -33,7 +33,7 @@
                     <p>Pixie will let you in as a guest… just don’t mess with her nap schedule.</p>
                     <button id="play-as-guest" tabindex="0" class="no-full-width">Play as guest</button>
                 </div>
-                <img src="./assets/img/invite_pixie.png" class="right-img" />
+                <img src="./assets/img/invite_pixie.webp" class="right-img" />
             </div>
         </div>
     </main>
@@ -42,6 +42,29 @@
         <span>Relamidos from</span><span role="img" aria-label="Canary Islands">🇮🇨</span><span>to the world</span>
         <span>© 2025</span>
     </footer>
+    <dialog id="error400" aria-labelledby="400-error-title" aria-describedby="error400-msg">
+        <div class="box" data-box="error">
+            <button class="closeButton no-full-width" tabindex="0" aria-label="Close"><img
+                    src="assets/img/svg/close.svg" alt="" /></button>
+            <div class="inside">
+                <h3 id="400-error-title">Invalid login details</h3>
+                <p id="error400-msg">Please check your username and password and try again.</p>
+            </div>
+            <img src="./assets/img/shower.webp" class="right-img" />
+        </div>
+    </dialog>
+    <dialog id="fetch-error" aria-labelledby="500-error-title" aria-describedby="error500-msg">
+        <div class="box" data-box="error">
+            <button class="closeButton no-full-width" tabindex="0" aria-label="Close"><img
+                    src="./assets/img/svg/close.svg" alt="" /></button>
+            <div class="inside">
+                <h3 id="500-error-title">Error Detected</h3>
+                <p id="error500-msg">If you’re offline, go pet your router. If you’re online, that’s on us and we’ll
+                    patch it up faster than Sasha finds a slobber target.</p>
+            </div>
+            <img src="./assets/img/pixie_cables.webp" class="right-img" />
+        </div>
+    </dialog>
     <script src="./src/account/login.js"></script>
 </body>
 

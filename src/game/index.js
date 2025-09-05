@@ -14,6 +14,7 @@ const srStatus = document.getElementById("sr-status");
 const overlay = document.querySelector(".overlay");
 const logoutButton = document.getElementById("logout");
 const addAvatar = document.getElementById("add-avatar");
+const unlickDialog = document.getElementById("guest-wrong-unlick");
 
 let currentUser = null;
 const createdUsers = new Set();
@@ -156,7 +157,13 @@ const createDeleteForm = (user) => {
       srStatus.textContent = `You are removing: ${selectedPart}, which represents ${pointsToRemove} points. Your total score is now ${totalScores[currentUser]}`;
     } else {
       srStatus.textContent = "You've not been licked there!";
-      alert("You've not been licked there!");
+      unlickDialog.showModal();
+      unlickDialog.querySelector(".closeButton").addEventListener("click", () => unlickDialog.close());
+      unlickDialog.addEventListener("click", (e) => {
+        if (e.target === unlickDialog) {
+          unlickDialog.close()
+        }
+      });
     }
   });
   return form;

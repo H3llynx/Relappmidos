@@ -16,7 +16,8 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
         );
         if (!response.ok) {
             if (response.status === 401) {
-                alert("Invalid username or password.");
+                const box = document.getElementById("error400");
+                box.showModal();
                 return;
             }
             throw new Error(`Login request failed: ${response.statusText}`);
@@ -25,7 +26,9 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
         localStorage.setItem("loggedInUser", enteredName);
         window.location.href = "index.html";
     } catch (error) {
-        alert("Error during login: " + error.message);
+        console.error('Network / Fetch error :', error.message);
+        const box = document.getElementById("fetch-error");
+        box.showModal();
     }
 });
 
@@ -33,4 +36,22 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 document.getElementById("play-as-guest").addEventListener("click", () => {
     localStorage.setItem("loggedInUser", "pixie");
     window.location.href = "index.html";
+});
+
+// ---- CLOSING ALERTS ------------
+document.querySelectorAll("dialog").forEach(box => {
+    box.addEventListener("click", e => {
+        if (e.target === box) {
+            box.close();
+        }
+    });
+});
+
+document.querySelectorAll(".closeButton").forEach(button => {
+    button.addEventListener("click", (e) => {
+        const dialog = e.target.closest("dialog");
+        if (dialog) {
+            dialog.close();
+        }
+    });
 });
