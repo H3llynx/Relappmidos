@@ -85,15 +85,15 @@ h3 {
 }
 
 h1 {
-    font-size: 2.2rem;
+    font-size: clamp(1.8rem, 4vw, 2.2rem);
 }
 
 h2 {
-    font-size: 1.8rem;
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
 }
 
 h3 {
-    font-size: 1.4rem;
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
 }
 
 .visually-hidden {
@@ -127,7 +127,7 @@ p {
         -2px -2px 0 black,
         2px -2px 0 black,
         -2px 2px 0 black;
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 2vw, 1.2rem);
     text-align: left;
 }
 
@@ -154,7 +154,6 @@ p {
 }
 
 footer {
-    font-size: 0.9rem;
     text-align: center;
     padding: 1em 0em;
     color: #7a8f89;
@@ -165,7 +164,7 @@ footer {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: clamp(0.7rem, 2vw, 0.9rem);
+    font-size: clamp(0.65rem, 0.5vw, 0.9rem);
 }
 
 span {
@@ -223,7 +222,7 @@ button,
 }
 
 #back-button {
-    font-size: 1.4rem;
+    font-size: 1.8rem;
 }
 
 button:focus-visible,
@@ -242,7 +241,7 @@ button:focus-visible,
 .flex-container .button:focus-visible {
     outline: 2px solid whitesmoke;
     background: #384d4b;
-    font-size: 1.6rem;
+    font-size: clamp(1.6rem, 4.5vw, 2rem);
 }
 
 .arrows {
@@ -407,10 +406,6 @@ dialog::backdrop {
 
 
 @media only screen and (max-width: 1130px) {
-    html {
-        font-size: 90%;
-    }
-
     .counter {
         width: 450px;
     }
@@ -437,16 +432,9 @@ dialog::backdrop {
 }
 
 @media only screen and (max-width: 600px) {
-    html {
-        font-size: 95%;
-    }
 
     body {
         background-blend-mode: darken;
-    }
-
-    h2 {
-        font-size: 1.5rem;
     }
 
     p {
@@ -467,7 +455,6 @@ dialog::backdrop {
         padding: 9px 30px;
         border-left: 0;
         border-right: 0;
-        font-size: 1.8rem;
         text-align: left;
 
         &:hover {
@@ -500,11 +487,6 @@ dialog::backdrop {
 
     .box:has(> .closeButton) .inside h3 {
         padding-top: 30px;
-    }
-
-    .inside h2,
-    .inside h3 {
-        font-size: 1.3rem;
     }
 
     .inside p {
@@ -544,6 +526,5 @@ dialog::backdrop {
     #back-button:focus-visible,
     .flex-container .button:focus-visible {
         outline: none;
-        font-size: 2rem;
     }
 }
