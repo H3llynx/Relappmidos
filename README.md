@@ -9,9 +9,11 @@ A fun and interactive web app that tracks dogs' daily slurps and licks on their 
 - JavaScript  
 
 ## Features
-- Tracks daily lick/slurp count with simple button controls.  
-- Allows user avatar selection for personalization.  
-- Responsive design for multiple screen sizes.  
+- Slurp counter game: Tap/click defined avatar zones with instant visual feedback.
+- User authentication: Registration, login, and secure password validation.
+- Captcha integration: Protects registration from bots.
+- Guest mode: Try the game without logging in (slurps go to the cat, but not saved).
+- Registered users can request their own avatar: the app can access the device’s front camera.
 
 ## Important Note
 The live demo is currently disabled to manage backend resource costs, but this repository contains the full front-end code for the app.
