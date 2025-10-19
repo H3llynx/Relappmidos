@@ -165,18 +165,18 @@ footer {
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: clamp(0.65rem, 0.5vw, 0.9rem);
-}
 
-span {
-    padding: 0 5px;
-}
+    & span {
+        padding: 0 5px;
 
-span:first-child {
-    border-right: 1px solid #7a8f89;
-}
+        &:first-child {
+            border-right: 1px solid #7a8f89;
+        }
 
-span:last-child {
-    border-left: 1px solid #222;
+        &:last-child {
+            border-left: 1px solid #222;
+        }
+    }
 }
 
 a {

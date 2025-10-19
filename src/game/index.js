@@ -34,18 +34,22 @@ if (!loggedInUser) {
 } else if (loggedInUser === "pixie") {
   // guest mode: hide other avatars
   document.querySelectorAll(".avatar-img").forEach((img) => {
-    if (img.id !== loggedInUser) img.style.display = "none";
+    if (img.id !== loggedInUser) document.getElementById(`${img.id}-container`).style.display = "none";
   });
   console.warn("You are in guest mode. Your score won't be saved.");
   logoutButton.textContent = "Back"
   addAvatar.style.display = "none"
 } else {
   // logged-in mode: disable user's own avatar (you can't add licks to yourself!)
-  document.querySelectorAll(".avatar-img").forEach((img) => {
+  document.querySelectorAll(".avatar-img").forEach(async (img) => {
     if (img.id === loggedInUser) {
       img.style.opacity = "0.7";
       img.style.pointerEvents = "none";
       img.tabIndex = -1;
+      const userInfo = await getUserInfo(loggedInUser);
+      const userId = userInfo.id;
+      const score = await getUserScore(userId);
+      document.getElementById(`${img.id}-container`).innerHTML += `<p>Your score: ${score}</p>`
     }
   });
 }
@@ -229,8 +233,8 @@ const registerGoBackEvent = () => {
           className: "video-mobile",
         });
         const goodbye = createElement("h1", {
-          innerHTML: `<h1> Bye Bye ${currentUser.charAt(0).toUpperCase() + currentUser.slice(1)
-            }!<h1><h2>Current score: ${totalScores[currentUser]}</h2>`,
+          innerHTML: `<h1> ${currentUser.charAt(0).toUpperCase() + currentUser.slice(1)
+            } survived the slurp attack!<h1><h2>Total score: ${totalScores[currentUser]}</h2>`,
           className: "goodbye-title",
         });
         overlay.appendChild(video);
