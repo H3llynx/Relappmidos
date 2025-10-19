@@ -18,8 +18,8 @@ const unlickDialog = document.getElementById("guest-wrong-unlick");
 
 let currentUser = null;
 const createdUsers = new Set();
-let userId = null;
-let userType = null;
+let playerId = null;
+let playerType = null;
 
 const userPartsMap = {};
 const totalScores = {};
@@ -27,32 +27,39 @@ const clickCounts = {};
 
 
 // ---- DISPLAYS AVATARS AND OPTIONS DEPENDING ON AUTHENTICATED USER ----
-
 const loggedInUser = localStorage.getItem("loggedInUser");
-if (!loggedInUser) {
-  window.location.replace('login.html');
-} else if (loggedInUser === "pixie") {
-  // guest mode: hide other avatars
-  document.querySelectorAll(".avatar-img").forEach((img) => {
-    if (img.id !== loggedInUser) document.getElementById(`${img.id}-container`).style.display = "none";
-  });
-  console.warn("You are in guest mode. Your score won't be saved.");
-  logoutButton.textContent = "Back"
-  addAvatar.style.display = "none"
-} else {
-  // logged-in mode: disable user's own avatar (you can't add licks to yourself!)
-  document.querySelectorAll(".avatar-img").forEach(async (img) => {
-    if (img.id === loggedInUser) {
-      img.style.opacity = "0.7";
-      img.style.pointerEvents = "none";
-      img.tabIndex = -1;
-      const userInfo = await getUserInfo(loggedInUser);
+
+const checkIfLogged = () => {
+  if (!loggedInUser) {
+    window.location.replace('login.html');
+  } else if (loggedInUser === "pixie") {
+    document.querySelectorAll(".avatar-img").forEach((img) => {
+      if (img.id !== loggedInUser) document.getElementById(`${img.id}-container`).style.display = "none";
+    });
+    console.warn("You are in guest mode. Your score won't be saved.");
+    logoutButton.textContent = "Back"
+    addAvatar.style.display = "none"
+  } else {
+    document.querySelectorAll(".avatar-img").forEach(async (img) => {
+      const userInfo = await getUserInfo(img.id);
       const userId = userInfo.id;
       const score = await getUserScore(userId);
-      document.getElementById(`${img.id}-container`).innerHTML += `<p>Your score: ${score}</p>`
-    }
-  });
+      if (img.id === loggedInUser) {
+        img.style.opacity = "0.6";
+        document.getElementById(`${img.id}-container`).style.backdropFilter = "blur(2px)";
+        document.getElementById(`${img.id}-container`).style.webkitBackdropFilter = "blur(2px)";
+        img.style.pointerEvents = "none";
+        img.tabIndex = -1;
+        document.getElementById(`${img.id}-container`).innerHTML += `<span style="color:#e4a434">Your score: ${score}</span>`
+      }
+      else {
+        document.getElementById(`${img.id}-container`).innerHTML += `<span>Current score: ${score}</span>`
+      }
+    });
+  }
 }
+
+checkIfLogged()
 
 // ---- DEFINE GAME INIT AND RESET --------------------------------------
 const reset = () => {
@@ -64,8 +71,8 @@ const reset = () => {
   counter.style.display = "none";
   backButtonContainer.style.display = "none";
   currentUser = null;
-  userId = null;
-  userType = null;
+  playerId = null;
+  playerType = null;
 };
 
 const init = (avatar) => {
@@ -75,7 +82,7 @@ const init = (avatar) => {
   document.getElementById(`face-${avatar}`).style.display = "block";
   counter.style.display = "block";
   document.getElementById(`score-table-${avatar}`).style.display = "table";
-  // Guest mode: delete form:
+  // Guest mode - slurp delete option:
   if (loggedInUser === "pixie") {
     document.getElementById(`unclick-${avatar}`).style.display = "block";
   }
@@ -124,6 +131,16 @@ const createUserTable = async (user) => {
   return table;
 };
 
+const createScoreForUser = async (user) => {
+  if (createdUsers.has(user)) return;
+  const table = await createUserTable(user);
+  const scoreContainer = document.getElementById("score-container");
+  if (loggedInUser === "pixie") scoreContainer.append(table, createDeleteForm(user));
+  else scoreContainer.append(table);
+  createdUsers.add(user);
+};
+
+// Slurp delete form - only available in guest mode
 const createDeleteForm = (user) => {
   const form = createElement("form", {
     id: `unclick-${user}`,
@@ -173,15 +190,6 @@ const createDeleteForm = (user) => {
   return form;
 };
 
-const createScoreForUser = async (user) => {
-  if (createdUsers.has(user)) return;
-  const table = await createUserTable(user);
-  const scoreContainer = document.getElementById("score-container");
-  if (loggedInUser === "pixie") scoreContainer.append(table, createDeleteForm(user));
-  else scoreContainer.append(table);
-  createdUsers.add(user);
-};
-
 // ---- AVATAR SELECTION ------------------------------------------------
 const registerSelectUserEvent = () => {
   avatars.forEach((avatar) =>
@@ -194,11 +202,11 @@ const registerSelectUserEvent = () => {
       );
       // if not in guest mode, get the user id and score from API:
       if (loggedInUser !== "pixie") {
-        const playerInfo = await getUserInfo(player);
-        userId = playerInfo.id;
-        userType = playerInfo.type;
-        totalScores[currentUser] = await getUserScore(userId);
-        console.log(`You are logged in as ${loggedInUser} and licking ${player} (user id: ${userId}, user type: ${userType})`);
+        const selectedPlayer = await getUserInfo(player);
+        playerId = selectedPlayer.id;
+        playerType = selectedPlayer.type;
+        totalScores[currentUser] = await getUserScore(playerId);
+        console.log(`You are logged in as ${loggedInUser} and licking ${player} (user id: ${playerId}, user type: ${playerType})`);
       } else {
         // guest mode:
         totalScores[currentUser] = 0;
@@ -332,8 +340,8 @@ const registerClickZonesEvents = () => {
       // If not in guest mode, sends the relamido to the API:
       if (loggedInUser !== "pixie") {
         try {
-          const partId = await getFacePartId(part, userType);
-          const result = await sendRelamido(userId, partId);
+          const partId = await getFacePartId(part, playerType);
+          const result = await sendRelamido(playerId, partId);
           console.log(`Relamido saved by ${loggedInUser} to ${currentUser}:`, result);
           updateUI(part, points);
         } catch (err) {
@@ -341,7 +349,6 @@ const registerClickZonesEvents = () => {
           alert("Oops! Your lick wasn’t saved. Try again!");
         }
       } else {
-        // guest mode:
         updateUI(part, points);
       }
     })

@@ -113,12 +113,8 @@ main {
         position: relative;
     }
 
-    & p {
-        position: absolute;
-        z-index: 1;
-        bottom: 0;
-        padding: 1%;
-        width: 100%;
+    & span {
+        display: block;
         text-align: center;
         font-size: 0.9rem;
     }
