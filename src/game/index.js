@@ -30,36 +30,31 @@ const clickCounts = {};
 const loggedInUser = localStorage.getItem("loggedInUser");
 
 const checkIfLogged = () => {
-  if (!loggedInUser) {
-    window.location.replace('login.html');
-  } else if (loggedInUser === "pixie") {
-    document.querySelectorAll(".avatar-img").forEach((img) => {
-      if (img.id !== loggedInUser) document.getElementById(`${img.id}-container`).style.display = "none";
-    });
-    console.warn("You are in guest mode. Your score won't be saved.");
-    logoutButton.textContent = "Back"
-    addAvatar.style.display = "none"
-  } else {
-    document.querySelectorAll(".avatar-img").forEach(async (img) => {
-      const userInfo = await getUserInfo(img.id);
-      const userId = userInfo.id;
-      const score = await getUserScore(userId);
-      if (img.id === loggedInUser) {
-        img.style.opacity = "0.6";
-        document.getElementById(`${img.id}-container`).style.backdropFilter = "blur(2px)";
-        document.getElementById(`${img.id}-container`).style.webkitBackdropFilter = "blur(2px)";
-        img.style.pointerEvents = "none";
-        img.tabIndex = -1;
-        document.getElementById(`${img.id}-container`).innerHTML += `<span style="color:#e4a434">Your score: ${score}</span>`
-      }
-      else {
-        document.getElementById(`${img.id}-container`).innerHTML += `<span>Current score: ${score}</span>`
-      }
-    });
-  }
-}
+if (!loggedInUser) {
+  window.location.replace('login.html');
+} else if (loggedInUser === "pixie") {
+  // guest mode: hide other avatars
+  document.querySelectorAll(".avatar-img").forEach((img) => {
+    if (img.id !== loggedInUser) img.style.display = "none";
+  });
+  console.warn("You are in guest mode. Your score won't be saved.");
+  logoutButton.textContent = "Back"
+  addAvatar.style.display = "none"
+} else {
+  // logged-in mode: disable user's own avatar (you can't add licks to yourself!)
+  document.querySelectorAll(".avatar-img").forEach((img) => {
+    if (img.id === loggedInUser) {
+      img.style.opacity = "0.6";
+      img.style.backdropFilter = "blur(2px)";
+      img.style.webkitBackdropFilter = "blur(2px)";
+      img.style.pointerEvents = "none";
+      img.tabIndex = -1;
+    }
+  });
+}};
 
 checkIfLogged()
+
 
 // ---- DEFINE GAME INIT AND RESET --------------------------------------
 const reset = () => {
