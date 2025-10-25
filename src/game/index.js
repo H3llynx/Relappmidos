@@ -29,6 +29,8 @@ const clickCounts = {};
 // ---- DISPLAYS AVATARS AND OPTIONS DEPENDING ON AUTHENTICATED USER ----
 
 const loggedInUser = localStorage.getItem("loggedInUser");
+
+const checkIfLogged = () => {
 if (!loggedInUser) {
   window.location.replace('login.html');
 } else if (loggedInUser === "pixie") {
@@ -43,12 +45,17 @@ if (!loggedInUser) {
   // logged-in mode: disable user's own avatar (you can't add licks to yourself!)
   document.querySelectorAll(".avatar-img").forEach((img) => {
     if (img.id === loggedInUser) {
-      img.style.opacity = "0.7";
+      img.style.opacity = "0.6";
+      img.style.backdropFilter = "blur(2px)";
+      img.style.webkitBackdropFilter = "blur(2px)";
       img.style.pointerEvents = "none";
       img.tabIndex = -1;
     }
   });
-}
+}};
+
+checkIfLogged()
+
 
 // ---- DEFINE GAME INIT AND RESET --------------------------------------
 const reset = () => {
