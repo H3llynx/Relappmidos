@@ -1,5 +1,5 @@
 import { defaultPoints } from "./config.js";
-import { getFacePartId, getUserInfo, getUserScore, sendRelamido } from "./services.js";
+import { decodeJWT, getFacePartId, getUserInfo, getUserScore, sendRelamido } from "./services.js";
 import { createElement } from "./utils.js";
 import { showFloatingScore, showRipple } from "./visuals.js";
 
@@ -12,79 +12,114 @@ const counter = document.querySelector(".counter");
 const avatars = document.querySelectorAll(".avatar-img");
 const srStatus = document.getElementById("sr-status");
 const overlay = document.querySelector(".overlay");
-const logoutButton = document.getElementById("logout");
-const addAvatar = document.getElementById("add-avatar");
-const unlickDialog = document.getElementById("guest-wrong-unlick");
 
-let currentUser = null;
+let currentUser = "";
 const createdUsers = new Set();
+let selectedPlayer = "";
 let playerId = null;
-let playerType = null;
+let playerType = "";
 
 const userPartsMap = {};
 const totalScores = {};
 const clickCounts = {};
 
 
-// ---- DISPLAYS AVATARS AND OPTIONS DEPENDING ON AUTHENTICATED USER ----
-const loggedInUser = localStorage.getItem("loggedInUser");
+// ---- CONFIRMS LOGIN, TOKEN EXPIRATION AND LOG OUT LOGIC --------------
 
-const checkIfLogged = () => {
-if (!loggedInUser) {
-  window.location.replace('login.html');
-} else if (loggedInUser === "pixie") {
-  // guest mode: hide other avatars
-  document.querySelectorAll(".avatar-img").forEach((img) => {
-    if (img.id !== loggedInUser) img.style.display = "none";
+const tokenExpired = () => {
+  localStorage.removeItem("access_token");
+  const box = document.getElementById("expired-token");
+  box.showModal();
+  box.querySelector(".closeButton").addEventListener("click", () => {
+    window.location.href = "login.html";
   });
-  console.warn("You are in guest mode. Your score won't be saved.");
-  logoutButton.textContent = "Back"
-  addAvatar.style.display = "none"
-} else {
-  // logged-in mode: disable user's own avatar (you can't add licks to yourself!)
-  document.querySelectorAll(".avatar-img").forEach((img) => {
-    if (img.id === loggedInUser) {
+}
+
+const confirmGameAccess = () => {
+  const token = localStorage.getItem("access_token");
+  // Redirects to login if there's no token:
+  if (!token) {
+    window.location.replace('login.html');
+    return;
+  }
+  // Retrieves information from token if any:
+  const payload = decodeJWT(token);
+  // Handle redirection to login in case of token expiration
+  if (!payload || !payload.exp) return tokenExpired();
+  const now = Math.floor(Date.now() / 1000);
+  const timeUntilExpire = (payload.exp - now) * 1000;
+  if (timeUntilExpire <= 0) return tokenExpired();
+  setTimeout(() => {
+    tokenExpired();
+  }, timeUntilExpire);
+  // Retrieves logged user:
+  currentUser = payload.name;
+}
+
+confirmGameAccess();
+
+const logoutButton = document.getElementById("logout");
+if (logoutButton) {
+  logoutButton.addEventListener("click", () => {
+    localStorage.removeItem("access_token");
+    window.location.href = "login.html";
+  });
+};
+
+// ---- DISPLAYS AVATARS AND OPTIONS DEPENDING ON AUTHENTICATED USER ----
+const displayAvatars = async () => {
+  for (const img of avatars) {
+    const userInfo = await getUserInfo(img.id);
+    const score = await getUserScore(userInfo.id);
+    const container = document.getElementById(`${img.id}-container`);
+
+    const span = document.createElement("span");
+    span.textContent =
+      img.id === currentUser ? `Your score: ${score}` : `Current score: ${score}`;
+    if (img.id === currentUser) span.style.color = "#e4a434";
+    container.appendChild(span);
+
+    if (img.id === currentUser) {
       img.style.opacity = "0.6";
-      img.style.backdropFilter = "blur(2px)";
-      img.style.webkitBackdropFilter = "blur(2px)";
+      container.style.backdropFilter = "blur(2px)";
+      container.style.webkitBackdropFilter = "blur(2px)";
       img.style.pointerEvents = "none";
       img.tabIndex = -1;
     }
-  });
-}};
+  }
+};
 
-checkIfLogged()
+displayAvatars();
 
 
 // ---- DEFINE GAME INIT AND RESET --------------------------------------
 const reset = () => {
-  if (currentUser) {
-    document.getElementById(`face-${currentUser}`).style.display = "none";
-    document.getElementById(`score-table-${currentUser}`).style.display = "none";
+  if (selectedPlayer) {
+    document.getElementById(`face-${selectedPlayer}`).style.display = "none";
+    document.getElementById(`score-table-${selectedPlayer}`).style.display = "none";
   }
   selectAvatar.style.display = "block";
   counter.style.display = "none";
   backButtonContainer.style.display = "none";
-  currentUser = null;
+  selectedPlayer = "";
   playerId = null;
-  playerType = null;
+  playerType = "";
 };
 
-const init = (avatar) => {
-  srStatus.textContent = `You are playing with ${avatar}.`;
+const init = (player) => {
+  srStatus.textContent = `You are playing with ${player}.`;
   selectAvatar.style.display = "none";
   backButtonContainer.style.display = "flex";
-  document.getElementById(`face-${avatar}`).style.display = "block";
+  document.getElementById(`face-${player}`).style.display = "block";
   counter.style.display = "block";
-  document.getElementById(`score-table-${avatar}`).style.display = "table";
-  // Guest mode - slurp delete option:
-  if (loggedInUser === "pixie") {
-    document.getElementById(`unclick-${avatar}`).style.display = "block";
+  const table = document.getElementById(`score-table-${player}`);
+  if (table) {
+    table.style.display = "table";
   }
 };
 
 // ---- RETRIEVE AND INITIALIZE USERS AND THEIR BODY PARTS --------------
-const registerClickZones = async () => {
+const registerClickZones = () => {
   for (const zone of clickZones) {
     const user = zone.dataset.user;
     const part = zone.dataset.part;
@@ -96,118 +131,59 @@ const registerClickZones = async () => {
 };
 
 // ---- CREATES THE COUNTER SECTION FOR EACH USER -----------------------
-const createUserTable = async (user) => {
+const createPlayerTable = (player) => {
   const table = createElement("table", {
-    id: `score-table-${user}`,
+    id: `score-table-${player}`,
     className: "score-table",
   });
   table.innerHTML = `
     <thead><tr><th>Body parts</th><th>Points</th></tr></thead>
-    <tbody id="score-body-${user}"></tbody>
+    <tbody id="score-body-${player}"></tbody>
   `;
   const body = table.querySelector("tbody");
-  userPartsMap[user].forEach((part) => {
+  userPartsMap[player].forEach((part) => {
     const row = createElement("tr");
     row.innerHTML = `
       <td id="${part}">${part.charAt(0).toUpperCase() + part.slice(1)}</td>
-      <td id="${part}-${user}">0</td>
+      <td id="${part}-${player}">0</td>
     `;
     body.appendChild(row)
   });
   const totalRow = createElement("tr");
 
-  const total = totalScores[user]
-
   totalRow.innerHTML = `
   <td class="score">Total</td>
-  <td id="total-score-${user}" class="score">${total}</td>
+  <td id="total-score-${player}" class="score">${totalScores[player]}</td>
 `;
   body.appendChild(totalRow);
   return table;
 };
 
-const createScoreForUser = async (user) => {
-  if (createdUsers.has(user)) return;
-  const table = await createUserTable(user);
+const createPlayerScore = async (player) => {
+  // Makes sure to create the table only once per user and session (session ends at refresh):
+  if (createdUsers.has(player)) { return };
+  const table = createPlayerTable(player);
   const scoreContainer = document.getElementById("score-container");
-  if (loggedInUser === "pixie") scoreContainer.append(table, createDeleteForm(user));
-  else scoreContainer.append(table);
-  createdUsers.add(user);
+  scoreContainer.append(table);
+  createdUsers.add(player);
 };
 
-// Slurp delete form - only available in guest mode
-const createDeleteForm = (user) => {
-  const form = createElement("form", {
-    id: `unclick-${user}`,
-    className: "unclick-section",
-  });
-  const selectId = `unclick-select-${user}`;
-  form.innerHTML = `
-    <p style="color: #f0bd64;">Over-C-licked? Pick a value to remove licks:</p>
-    <label for="${selectId}">Choose a body part to remove licks:</label>
-    <select id="${selectId}"></select>
-    <button class="unclick-btn no-full-width" type="submit" tabindex="0">Remove</button>
-  `;
-  const dropdown = form.querySelector("select");
-  userPartsMap[user].forEach((part) => {
-    const unclickOption = createElement("option", {
-      value: part,
-      textContent: part.charAt(0).toUpperCase() + part.slice(1),
-    });
-    dropdown.appendChild(unclickOption);
-  });
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const selectedPart = dropdown.value;
-    const partCell = document.getElementById(`${selectedPart}-${user}`);
-    const currentPartPoints = parseInt(partCell.textContent);
-    const pointsToRemove = defaultPoints[selectedPart];
-    if (currentPartPoints >= pointsToRemove) {
-      partCell.textContent = currentPartPoints - pointsToRemove;
-      totalScores[user] -= pointsToRemove;
-      console.log(`Updated points for this part: ${currentPartPoints}`);
-      console.log(`New score: ${totalScores[user]}`);
-      document.getElementById(`total-score-${user}`).textContent =
-        totalScores[user];
-      clickCounts[user][selectedPart] -= 1;
-      srStatus.textContent = `You are removing: ${selectedPart}, which represents ${pointsToRemove} points. Your total score is now ${totalScores[currentUser]}`;
-    } else {
-      srStatus.textContent = "You've not been licked there!";
-      unlickDialog.showModal();
-      unlickDialog.querySelector(".closeButton").addEventListener("click", () => unlickDialog.close());
-      unlickDialog.addEventListener("click", (e) => {
-        if (e.target === unlickDialog) {
-          unlickDialog.close()
-        }
-      });
-    }
-  });
-  return form;
-};
 
 // ---- AVATAR SELECTION ------------------------------------------------
-const registerSelectUserEvent = () => {
+const registerSelectPlayerEvent = () => {
   avatars.forEach((avatar) =>
     avatar.addEventListener("click", async () => {
-      const player = avatar.id;
-      currentUser = player;
+      selectedPlayer = avatar.id;
       // Accessibility: aria selected on selected avatar:
       avatars.forEach((avatar) =>
-        avatar.setAttribute("aria-selected", avatar.id === player ? "true" : "false")
+        avatar.setAttribute("aria-selected", avatar.id === selectedPlayer ? "true" : "false")
       );
-      // if not in guest mode, get the user id and score from API:
-      if (loggedInUser !== "pixie") {
-        const selectedPlayer = await getUserInfo(player);
-        playerId = selectedPlayer.id;
-        playerType = selectedPlayer.type;
-        totalScores[currentUser] = await getUserScore(playerId);
-        console.log(`You are logged in as ${loggedInUser} and licking ${player} (user id: ${playerId}, user type: ${playerType})`);
-      } else {
-        // guest mode:
-        totalScores[currentUser] = 0;
-      }
-      await createScoreForUser(currentUser);
-      init(player);
+      const player = await getUserInfo(selectedPlayer);
+      playerId = player.id;
+      playerType = player.type;
+      totalScores[selectedPlayer] = await getUserScore(playerId);
+      createPlayerScore(selectedPlayer);
+      init(selectedPlayer);
     })
   );
 };
@@ -215,14 +191,14 @@ const registerSelectUserEvent = () => {
 // ---- GO BACK BUTTON --------------------------------------------------
 const registerGoBackEvent = () => {
   backButton.addEventListener("click", () => {
-    if (currentUser) {
-      srStatus.textContent = `Thank you for playing with Sasha and ${currentUser}! \
-      Your current total score is: ${totalScores[currentUser]}.\
+    if (selectedPlayer) {
+      srStatus.textContent = `Thank you for playing with Sasha and ${selectedPlayer}! \
+      Your current total score is: ${totalScores[selectedPlayer]}.\
       We hope to see you again soon. You will now be redirected to the avatar selection area.`;
       if (!/iPad/i.test(navigator.userAgent)) {
         // 👆 excluding iPad due to compatibility issue with my iPad and the video file
         let src;
-        if (currentUser === "pixie") {
+        if (selectedPlayer === "pixie") {
           src = "assets/video/pixie.mp4";
         } else {
           src = "assets/video/sasha.mp4";
@@ -236,8 +212,8 @@ const registerGoBackEvent = () => {
           className: "video-mobile",
         });
         const goodbye = createElement("h1", {
-          innerHTML: `<h1> ${currentUser.charAt(0).toUpperCase() + currentUser.slice(1)
-            } survived the slurp attack!<h1><h2>Total score: ${totalScores[currentUser]}</h2>`,
+          innerHTML: `<h1> ${selectedPlayer.charAt(0).toUpperCase() + selectedPlayer.slice(1)
+            } survived the slurp attack!<h1><h2>Total score: ${totalScores[selectedPlayer]}</h2>`,
           className: "goodbye-title",
         });
         overlay.appendChild(video);
@@ -256,17 +232,13 @@ const registerGoBackEvent = () => {
         }, 3500);
         overlay.addEventListener("click", exitAnimation);
       };
-      // Guest mode: delete form:
-      if (loggedInUser === "pixie") {
-        document.getElementById(`unclick-${currentUser}`).style.display = "none";
-      }
     }
     window.scrollTo({ top: 0, behavior: "smooth" });
-    console.log(`Bye bye ${currentUser}!`);
-    if (totalScores[currentUser] > 0) {
-      console.log(`Current score: ${totalScores[currentUser]}!`);
+    console.log(`Bye bye ${selectedPlayer}!`);
+    if (totalScores[selectedPlayer] > 0) {
+      console.log(`Current score: ${totalScores[selectedPlayer]}!`);
       console.log(`Licking history:`);
-      console.log(clickCounts[currentUser]);
+      console.log(clickCounts[selectedPlayer]);
     }
     reset();
   });
@@ -279,7 +251,7 @@ const registerOpenMouthEvents = () => {
       srStatus.textContent =
         "Click or press Tab to chose closed or open mouth.";
       const mouthContainer = document.getElementById(
-        `mouth-options-${currentUser}`
+        `mouth-options-${selectedPlayer}`
       );
       mouthContainer.style.display = "flex";
       overlay.classList.add("visible");
@@ -319,7 +291,7 @@ const registerOpenMouthEvents = () => {
 
 // ---- CLOSING MOUTH OPTIONS -------------------------------------------
 const closeMouthOptions = () => {
-  const mouthContainer = document.getElementById(`mouth-options-${currentUser}`);
+  const mouthContainer = document.getElementById(`mouth-options-${selectedPlayer}`);
   overlay.classList.remove("visible");
   mouthContainer.style.display = "none";
 }
@@ -332,19 +304,14 @@ const registerClickZonesEvents = () => {
     zone.addEventListener("click", async (e) => {
       showRipple(e, zone);
       showFloatingScore(e, points);
-      // If not in guest mode, sends the relamido to the API:
-      if (loggedInUser !== "pixie") {
-        try {
-          const partId = await getFacePartId(part, playerType);
-          const result = await sendRelamido(playerId, partId);
-          console.log(`Relamido saved by ${loggedInUser} to ${currentUser}:`, result);
-          updateUI(part, points);
-        } catch (err) {
-          console.error("Failed to send relamido:", err);
-          alert("Oops! Your lick wasn’t saved. Try again!");
-        }
-      } else {
+      try {
+        const partId = await getFacePartId(part, playerType);
+        const result = await sendRelamido(playerId, partId);
+        console.log(`Relamido saved by ${currentUser} to ${selectedPlayer}:`, result);
         updateUI(part, points);
+      } catch (err) {
+        console.error("Failed to send relamido:", err);
+        alert("Oops! Your lick wasn’t saved. Try again!");
       }
     })
   })
@@ -354,16 +321,16 @@ const updateUI = (part, points) => {
   if (part === "mouth" || part === "mouth (open)") {
     closeMouthOptions();
   }
-  const partCell = document.getElementById(`${part}-${currentUser}`);
+  const partCell = document.getElementById(`${part}-${selectedPlayer}`);
   if (partCell) {
     const current = parseInt(partCell.textContent) || 0;
     partCell.textContent = current + points;
-    clickCounts[currentUser][part] += 1;
-    console.log(`${currentUser}: clicks for ${part}: ${clickCounts[currentUser][part]}`);
+    clickCounts[selectedPlayer][part] += 1;
+    console.log(`${selectedPlayer}: clicks for ${part}: ${clickCounts[selectedPlayer][part]}`);
   }
-  totalScores[currentUser] += points;
-  document.getElementById(`total-score-${currentUser}`).textContent = totalScores[currentUser];
-  srStatus.textContent = `You selected: ${part}, which scores ${points}. Your total score is now ${totalScores[currentUser]}`;
+  totalScores[selectedPlayer] += points;
+  document.getElementById(`total-score-${selectedPlayer}`).textContent = totalScores[selectedPlayer];
+  srStatus.textContent = `You selected: ${part}, which scores ${points}. Your total score is now ${totalScores[selectedPlayer]}`;
 };
 
 // ---- GENERAL KEYBOARD ACCESSIBILITY EVENTS ---------------------------
@@ -380,7 +347,7 @@ const registerKeyboardEvents = () => {
 
 export default () => {
   registerClickZones();
-  registerSelectUserEvent();
+  registerSelectPlayerEvent();
   registerOpenMouthEvents();
   registerGoBackEvent();
   registerClickZonesEvents();

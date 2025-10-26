@@ -1,45 +1,39 @@
 const url = "https://d63ojp7jad.execute-api.eu-west-1.amazonaws.com/prod";
-const getHeaders = () => ({
-    "Content-Type": "application/json",
-    "Authorization": `Basic ${localStorage.getItem("authCredentials")}`
-});
+const token = localStorage.getItem("access_token");
+const headers = {
+    "Accept": "application/json",
+    "Authorization": `Bearer ${token}`
+};
 
-// Not exported but necessary:
-const getFaceParts = async (animalType) => {
+export const decodeJWT = (token) => {
     try {
-        const response = await fetch(`${url}/facepart/face_parts_by_animal_type?animal_type=${animalType}`, {
-            method: "GET",
-            headers: getHeaders()
-        });
-
-        if (!response.ok) {
-            let errorMessage;
-            try {
-                const errorData = await response.json();
-                errorMessage =
-                    errorData.message ||
-                    JSON.stringify(errorData) ||
-                    response.statusText ||
-                    `HTTP ${response.status}`;
-            } catch {
-                errorMessage = response.statusText || `HTTP ${response.status}`;
-            }
-            throw new Error(errorMessage);
-        }
-
-        const data = await response.json();
-        return data;
-
-    } catch (error) {
-        console.error('Error fetching information', error);
+        const base64Url = token.split('.')[1]; // Extract payload part
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/'); // Decode base64url to base64
+        const jsonPayload = decodeURIComponent(
+            atob(base64)
+                .split('')
+                .map(c => `%${('00' + c.charCodeAt(0).toString(16)).slice(-2)}`)
+                .join('')
+        );
+        return JSON.parse(jsonPayload);
+    } catch (err) {
+        console.error("Invalid JWT:", err);
+        return null;
     }
+}
+
+export const isTokenExpired = (token) => {
+    const payload = decodeJWT(token);
+    if (!payload || !payload.exp) return true;
+    const now = Math.floor(Date.now() / 1000);
+    return now >= payload.exp; // true = expired
 };
 
 export const getUserInfo = async (name) => {
     try {
         const response = await fetch(`${url}/user/users`, {
             method: "GET",
-            headers: getHeaders()
+            headers: headers
         });
         if (!response.ok) {
             throw new Error(`Failed to fetch users (HTTP ${response.status})`);
@@ -65,6 +59,37 @@ export const getUserInfo = async (name) => {
     }
 };
 
+// Not exported but necessary:
+const getFaceParts = async (animalType) => {
+    try {
+        const response = await fetch(`${url}/facepart/face_parts_by_animal_type?animal_type=${animalType}`, {
+            method: "GET",
+            headers: headers
+        });
+
+        if (!response.ok) {
+            let errorMessage;
+            try {
+                const errorData = await response.json();
+                errorMessage =
+                    errorData.message ||
+                    JSON.stringify(errorData) ||
+                    response.statusText ||
+                    `HTTP ${response.status}`;
+            } catch {
+                errorMessage = response.statusText || `HTTP ${response.status}`;
+            }
+            throw new Error(errorMessage);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error('Error fetching information', error);
+    }
+};
+
 export const getFacePartId = async (part, animalType) => {
     const data = await getFaceParts(animalType)
     if (!data) {
@@ -80,7 +105,11 @@ export const getFacePartId = async (part, animalType) => {
 export const sendRelamido = async (userId, partId) => {
     const response = await fetch(`${url}/user/lick`, {
         method: "POST",
-        headers: getHeaders(),
+        headers: {
+            "Accept": "application/json",
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+        },
         body: JSON.stringify({
             id_user: userId,
             face_part_id: partId
@@ -109,7 +138,7 @@ export const getUserScore = async (userId) => {
     try {
         const response = await fetch(`${url}/user/total_points?user_id=${userId}`, {
             method: "GET",
-            headers: getHeaders()
+            headers: headers
         });
         if (!response.ok) {
             throw new Error(`Failed to fetch total points (HTTP ${response.status})`);

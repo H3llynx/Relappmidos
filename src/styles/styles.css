@@ -331,6 +331,11 @@ dialog::backdrop {
     background: #7a8f89;
 }
 
+.box[data-box="token"] {
+    animation: bubble-in 1s ease-in forwards;
+    background: #333333f0;
+}
+
 .box[data-box="camera"] {
     animation: bubble-in 1s ease-in forwards;
     background: url(../../assets/img/photoshoot.webp);

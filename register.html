@@ -15,7 +15,9 @@
         <h1>Register</h1>
         <input type="text" name="username" placeholder="Username" required>
         <input type="password" name="password" placeholder="Password" required>
-        <p class="error-validation"></p>
+        <p class="error-validation password-validation" aria-live="polite"></p>
+        <input type="email" name="email" placeholder="Your email address" required>
+        <p class="error-validation email-validation" aria-live="polite"></p>
         <div class="flex-container">
             <img id="captchaImage" alt="Captcha loading...">
             <button id="reloadCaptcha" type="button" class="no-full-width" tabindex="0" aria-label="Reload captcha"><img

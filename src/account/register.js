@@ -4,7 +4,7 @@ let captchaId = ""
 // Avoid abusive captcha reloads:
 let dailyLimitReached = false;
 const maxCaptchaReloads = 5;
-const maxDailyReloads = 20;
+const maxDailyReloads = 30;
 const reloadCooldown = 60000; // 1 minute
 let reloadTimestamps = JSON.parse(localStorage.getItem("reloadTimestamps")) || [];
 let reloads = Number(localStorage.getItem("reloads")) || 0;
@@ -83,20 +83,22 @@ document.getElementById("reloadCaptcha").addEventListener("click", loadCaptcha);
 
 
 // ---- REGISTRATION --------------
-const erroxBox = document.querySelector(".error-validation");
-let isValidPassword = false
+let isValidPassword = false;
+let isValidEmail = false;
 
 // Password validation:
 document.querySelector('input[type="password"]').addEventListener("input", () => {
+    isValidPassword = false;
+    const erroxBox = document.querySelector(".password-validation");
     const password = document.querySelector('input[type="password"]').value;
     if (password.length < 8) {
-        erroxBox.textContent = "Password needs to have 8 or more characters";
+        erroxBox.textContent = "A weak bite! Use 8+ chars.";
     }
     else if (!(/\d/).test(password)) {
-        erroxBox.textContent = "Password must include at least 1 number";
+        erroxBox.textContent = "Add at least 1 number. Slurper rule!";
     }
     else if (!(/[A-Z]/).test(password)) {
-        erroxBox.textContent = "Password must include at least 1 uppercase letter";
+        erroxBox.textContent = "Use an UPPERCASE letter to pass!";
     }
     else {
         erroxBox.textContent = null;
@@ -104,10 +106,27 @@ document.querySelector('input[type="password"]').addEventListener("input", () =>
     }
 })
 
+// Email validation:
+document.querySelector('input[type="email"]').addEventListener("blur", () => {
+    isValidEmail = false;
+    const erroxBox = document.querySelector(".email-validation");
+    const email = document.querySelector('input[type="email"]').value;
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const isAsciiOnly = /^[^\u0080-\uFFFF]+$/;
+    if (!isAsciiOnly.test(email)) {
+        erroxBox.textContent = "🐾 Oops! Emojis not allowed.";
+    } else if (!emailPattern.test(email)) {
+        erroxBox.textContent = "Enter a real email, e.g. sasha@slurp.com.";
+    } else {
+        erroxBox.textContent = "";
+        isValidEmail = true;
+    }
+});
+
 // Form submission:
 document.getElementById("registerForm").addEventListener("submit", async (e) => {
     e.preventDefault();
-    if (!isValidPassword) {
+    if (!isValidPassword || !isValidEmail) {
         return;
     }
     else {
@@ -115,6 +134,7 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
         const registrationData = {
             name: formData.get("username").trim().toLowerCase(),
             password: formData.get("password"),
+            email: formData.get("email"),
             captcha_id: captchaId,
             captcha_answer: formData.get("captcha"),
             user_type: formData.get("user-type"),
@@ -150,11 +170,14 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
                 box.showModal();
                 return;
             } else {
+                const data = await response.json();
+                const token = data.access_token;
+                localStorage.setItem("access_token", token);
                 const box = document.getElementById("success");
                 box.showModal();
                 setTimeout(() => {
                     box.close();
-                    window.location.href = "login.html";
+                    window.location.href = "index.html";
                 }, 3000);
             };
         } catch (error) {
