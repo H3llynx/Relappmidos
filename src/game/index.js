@@ -67,17 +67,16 @@ if (logoutButton) {
 };
 
 // ---- DISPLAYS AVATARS AND OPTIONS DEPENDING ON AUTHENTICATED USER ----
-const displayAvatars = async () => {
+const showPlayersScore = async () => {
   for (const img of avatars) {
     const userInfo = await getUserInfo(img.id);
     const score = await getUserScore(userInfo.id);
     const container = document.getElementById(`${img.id}-container`);
 
-    const span = document.createElement("span");
+    const span = container.querySelector("span");
     span.textContent =
       img.id === currentUser ? `Your score: ${score}` : `Current score: ${score}`;
     if (img.id === currentUser) span.style.color = "#e4a434";
-    container.appendChild(span);
 
     if (img.id === currentUser) {
       img.style.opacity = "0.6";
@@ -89,7 +88,7 @@ const displayAvatars = async () => {
   }
 };
 
-displayAvatars();
+showPlayersScore();
 
 
 // ---- DEFINE GAME INIT AND RESET --------------------------------------
@@ -104,6 +103,7 @@ const reset = () => {
   selectedPlayer = "";
   playerId = null;
   playerType = "";
+  showPlayersScore();
 };
 
 const init = (player) => {
