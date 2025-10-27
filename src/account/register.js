@@ -111,9 +111,11 @@ document.querySelector('input[type="email"]').addEventListener("blur", () => {
     isValidEmail = false;
     const erroxBox = document.querySelector(".email-validation");
     const email = document.querySelector('input[type="email"]').value;
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    const isAsciiOnly = /^[^\u0080-\uFFFF]+$/;
-    if (!isAsciiOnly.test(email)) {
+    const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+    const emojiPattern = /\p{Extended_Pictographic}/gu;
+    if (!email) {
+        erroxBox.textContent = "Paws up! Your email’s missing";
+    } else if (emojiPattern.test(email)) {
         erroxBox.textContent = "🐾 Oops! Emojis not allowed.";
     } else if (!emailPattern.test(email)) {
         erroxBox.textContent = "Enter a real email, e.g. sasha@slurp.com.";
