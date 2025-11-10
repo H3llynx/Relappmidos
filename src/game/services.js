@@ -1,4 +1,4 @@
-const url = "https://d63ojp7jad.execute-api.eu-west-1.amazonaws.com/prod";
+const url = "https://7klega2ek2.execute-api.eu-west-1.amazonaws.com/prod";
 const token = localStorage.getItem("access_token");
 const headers = {
     "Accept": "application/json",
@@ -48,7 +48,8 @@ export const getUserInfo = async (name) => {
 
         const info = {
             type: user.user_type,
-            id: user.id_user
+            id: user.id_user,
+            name: user.name
         };
         return info;
 

@@ -1,3 +1,5 @@
+const url = "https://7klega2ek2.execute-api.eu-west-1.amazonaws.com/prod";
+
 // ---- LOGIN ---------------------
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -5,7 +7,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     const enteredEmail = formData.get("email").trim().toLowerCase();
     const enteredPassword = formData.get("password");
     try {
-        const response = await fetch("https://d63ojp7jad.execute-api.eu-west-1.amazonaws.com/prod/user/login", {
+        const response = await fetch(`${url}/user/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -37,6 +39,19 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
         box.showModal();
     }
 });
+
+// ---- GOOGLE LOGIN --------------
+// window.handleGoogleLogin = async (response) => {
+//     const res = await fetch(`${url}/google/auth`, {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({ credential: response.credential })
+//     });
+//     showOutput(await res.json());
+//     localStorage.setItem("access_token", response.credential);
+//     console.log(response.credential);
+//     window.location.href = "index.html";
+// };
 
 // ---- CLOSING ALERTS ------------
 document.querySelectorAll("dialog").forEach(box => {

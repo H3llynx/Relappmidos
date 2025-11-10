@@ -33,9 +33,9 @@ const tokenExpired = () => {
   box.querySelector(".closeButton").addEventListener("click", () => {
     window.location.href = "login.html";
   });
-}
+};
 
-const confirmGameAccess = () => {
+const confirmGameAccess = async () => {
   const token = localStorage.getItem("access_token");
   // Redirects to login if there's no token:
   if (!token) {
@@ -44,7 +44,7 @@ const confirmGameAccess = () => {
   }
   // Retrieves information from token if any:
   const payload = decodeJWT(token);
-  // Handle redirection to login in case of token expiration
+  // Handle redirection to login in case of expired token:
   if (!payload || !payload.exp) return tokenExpired();
   const now = Math.floor(Date.now() / 1000);
   const timeUntilExpire = (payload.exp - now) * 1000;
@@ -53,9 +53,9 @@ const confirmGameAccess = () => {
     tokenExpired();
   }, timeUntilExpire);
   // Retrieves logged user:
-  currentUser = payload.name;
-}
-
+  const userInfo = await getUserInfo(payload.name);
+  currentUser = userInfo.name;
+};
 confirmGameAccess();
 
 const logoutButton = document.getElementById("logout");

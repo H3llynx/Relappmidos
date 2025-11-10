@@ -62,15 +62,12 @@ const loadCaptcha = async (showAlert = true) => {
             localStorage.setItem("reloadTimestamps", JSON.stringify(reloadTimestamps));
 
             try {
-                const response = await fetch("https://d63ojp7jad.execute-api.eu-west-1.amazonaws.com/prod/user/captcha");
-                captchaId = response.headers.get("x-captcha-id");
-                const blob = await response.blob();
+                const response = await fetch("https://7klega2ek2.execute-api.eu-west-1.amazonaws.com/prod/user/captcha");
+                const data = await response.json();
+                captchaId = data.captcha_id;
+                const base64Image = data.image_base64;
                 const captchaImage = document.getElementById("captchaImage");
-                // Revoke old captcha if it exists:
-                if (captchaImage.src && captchaImage.src.startsWith("blob:")) {
-                    URL.revokeObjectURL(captchaImage.src);
-                }
-                captchaImage.src = URL.createObjectURL(blob);
+                captchaImage.src = `data:image/png;base64,${base64Image}`;
             } catch (error) {
                 console.error("Error loading captcha:", error);
             }
@@ -142,7 +139,7 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
             user_type: formData.get("user-type"),
         };
         try {
-            const response = await fetch('https://d63ojp7jad.execute-api.eu-west-1.amazonaws.com/prod/user/register', {
+            const response = await fetch('https://7klega2ek2.execute-api.eu-west-1.amazonaws.com/prod/user/register', {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(registrationData),
