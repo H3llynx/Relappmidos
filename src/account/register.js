@@ -1,5 +1,6 @@
 // ---- CAPTCHA -------------------
 let captchaId = ""
+const url = "https://d8ml27eov6.execute-api.eu-west-1.amazonaws.com/prod/user"
 
 // Avoid abusive captcha reloads:
 let dailyLimitReached = false;
@@ -62,7 +63,7 @@ const loadCaptcha = async (showAlert = true) => {
             localStorage.setItem("reloadTimestamps", JSON.stringify(reloadTimestamps));
 
             try {
-                const response = await fetch("https://7klega2ek2.execute-api.eu-west-1.amazonaws.com/prod/user/captcha");
+                const response = await fetch(`${url}/captcha`);
                 const data = await response.json();
                 captchaId = data.captcha_id;
                 const base64Image = data.image_base64;
@@ -139,7 +140,7 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
             user_type: formData.get("user-type"),
         };
         try {
-            const response = await fetch('https://7klega2ek2.execute-api.eu-west-1.amazonaws.com/prod/user/register', {
+            const response = await fetch(`${url}/register`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(registrationData),

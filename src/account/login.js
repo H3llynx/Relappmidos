@@ -1,4 +1,4 @@
-const url = "https://7klega2ek2.execute-api.eu-west-1.amazonaws.com/prod";
+const url = "https://d8ml27eov6.execute-api.eu-west-1.amazonaws.com/prod";
 
 // ---- LOGIN ---------------------
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
