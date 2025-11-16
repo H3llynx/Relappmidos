@@ -19,15 +19,32 @@
             <button type="submit" tabindex="0">Login</button>
         </form>
 
-        <div class="reg-invite">
+        <div class="register-google-area">
+            <div class="box" data-box="google">
+                <div class="inside">
+                    <h3>Fetch a quick login with Google!</h3>
+                    <!-- Loads One Tap login -->
+                    <div id="g_id_onload"
+                        data-client_id="33848130467-rs4eq57d54pq9tsckspvs8b1cna794ha.apps.googleusercontent.com"
+                        data-callback="handleGoogleLogin"></div>
+
+                    <!-- Standard Google button -->
+                    <div class="g_id_signin" data-type="standard" data-size="large" data-theme="filled_white"
+                        data-text="continue_with"></div>
+                </div>
+                <img src="./assets/img/google.webp" class="right-img" />
+            </div>
+
             <div class="box" data-box="register">
                 <div class="inside">
-                    <h2>No account?</h2>
-                    <p>Sasha’s waiting to drool on you.</p>
+                    <h2>Not using Google?</h2>
+                    <p>No problem! Sasha’s tail is still wagging for new friends. Also, that's the best option to
+                        register your cat.</p>
                     <a href="register.html" role="button" class="button" tabindex="0">Register</a>
                 </div>
                 <img src="./assets/img/register_sasha.webp" class="right-img" />
             </div>
+
         </div>
     </main>
     <footer>

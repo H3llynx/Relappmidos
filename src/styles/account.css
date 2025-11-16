@@ -26,6 +26,10 @@ body {
     background-repeat: no-repeat;
 }
 
+h3 {
+    margin: 0 0 1rem 0;
+}
+
 main {
     padding: 3rem;
     width: 100%;
@@ -108,6 +112,16 @@ label {
     background: #2d3a3ce7;
 }
 
+.box[data-box="google"] {
+    background: #2d3a3ce7;
+}
+
+.g_id_signin {
+    border: 3px solid #222;
+    border-radius: 10px;
+    background: #222;
+}
+
 .box[data-box="success"] {
     animation: bubble-in 1s ease-in forwards;
     background: #222;
@@ -123,8 +137,8 @@ label {
     background: #3c2222;
 }
 
-.reg-invite {
-    margin: auto 3rem 0 3rem;
+.register-google-area {
+    margin: auto 3rem 0 auto;
 }
 
 button,
@@ -201,8 +215,12 @@ button {
         padding: 0;
     }
 
-    .reg-invite {
+    .register-google-area {
         margin: 0 auto 2rem auto;
+    }
+
+    .box[data-box="google"] .right-img {
+        background: #2d3a3c78;
     }
 
     .box[data-box="error"] .right-img {

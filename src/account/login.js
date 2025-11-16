@@ -41,17 +41,40 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 });
 
 // ---- GOOGLE LOGIN --------------
-// window.handleGoogleLogin = async (response) => {
-//     const res = await fetch(`${url}/google/auth`, {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ credential: response.credential })
-//     });
-//     showOutput(await res.json());
-//     localStorage.setItem("access_token", response.credential);
-//     console.log(response.credential);
-//     window.location.href = "index.html";
-// };
+window.handleGoogleLogin = handleGoogleLogin;
+async function handleGoogleLogin(response, confirm_conversion = false) {
+    try {
+        const res = await fetch(`${url}/google/auth`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                credential: response.credential,
+                confirm_conversion: confirm_conversion
+            })
+        });
+
+        if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(errorData.detail || `HTTP error! status: ${res.status}`);
+        }
+
+        const data = await res.json();
+
+        if (data.needs_confirmation) {
+            if (confirm("This will convert your account to a Google account. You will no longer be able to log in with a password. Are you sure?")) {
+                handleGoogleLogin(response, true);
+            }
+            return;
+        }
+        localStorage.setItem("access_token", data.access_token);
+        window.location.href = "index.html";
+    } catch (error) {
+        console.error('Google login error:', error);
+        alert(`Google login failed: ${error.message}`);
+    }
+};
 
 // ---- CLOSING ALERTS ------------
 document.querySelectorAll("dialog").forEach(box => {
