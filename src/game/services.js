@@ -1,4 +1,4 @@
-const url = "https://d8ml27eov6.execute-api.eu-west-1.amazonaws.com/prod";
+const url = "https://jd6t3c006e.execute-api.eu-west-1.amazonaws.com/prod";
 const token = localStorage.getItem("access_token");
 const headers = {
     "Accept": "application/json",

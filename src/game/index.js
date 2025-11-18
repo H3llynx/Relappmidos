@@ -174,7 +174,6 @@ const registerSelectPlayerEvent = () => {
   avatars.forEach((avatar) =>
     avatar.addEventListener("click", async () => {
       selectedPlayer = avatar.id;
-      // Accessibility: aria selected on selected avatar:
       avatars.forEach((avatar) =>
         avatar.setAttribute("aria-selected", avatar.id === selectedPlayer ? "true" : "false")
       );

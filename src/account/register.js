@@ -1,6 +1,6 @@
 // ---- CAPTCHA -------------------
 let captchaId = ""
-const url = "https://d8ml27eov6.execute-api.eu-west-1.amazonaws.com/prod/user"
+const url = "https://jd6t3c006e.execute-api.eu-west-1.amazonaws.com/prod/user"
 
 // Avoid abusive captcha reloads:
 let dailyLimitReached = false;
