@@ -1,15 +1,15 @@
 export const defaultPoints = {
-  ear: 30,
-  eye: 50,
-  chin: 10,
-  beard: 15,
-  nose: 10,
-  forehead: 10,
-  cheeks: 10,
-  mouth: 100,
-  neck: 10,
-  whiskers: 15,
-  muzzle: 20,
-  "mouth (open)": 1000,
-  "neck (sweaty)": 30
+  ear: 30, // human + cat
+  eye: 50,  // human + cat
+  chin: 10,  // human + cat
+  beard: 15, // human
+  nose: 10, // human
+  forehead: 10,  // human + cat
+  cheeks: 10, // human
+  mouth: 100, // human
+  neck: 10, // human
+  whiskers: 15, // cat
+  muzzle: 20, //cat
+  "mouth (open)": 1000, // human
+  "neck (sweaty)": 30 // human
 };

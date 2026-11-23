@@ -77,14 +77,6 @@ const showPlayersScore = async () => {
     span.textContent =
       img.id === currentUser ? `Your score: ${score}` : `Current score: ${score}`;
     if (img.id === currentUser) span.style.color = "#e4a434";
-
-    if (img.id === currentUser) {
-      img.style.opacity = "0.6";
-      container.style.backdropFilter = "blur(2px)";
-      container.style.webkitBackdropFilter = "blur(2px)";
-      img.style.pointerEvents = "none";
-      img.tabIndex = -1;
-    }
   }
 };
 

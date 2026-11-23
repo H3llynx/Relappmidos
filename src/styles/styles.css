@@ -480,7 +480,7 @@ dialog::backdrop {
         margin-right: 10px;
     }
 
-    button:not(.no-full-width) {
+    button:not(.no-full-width, .view-btn) {
         width: 100%;
     }
 

@@ -1,5 +1,31 @@
 const url = "https://jd6t3c006e.execute-api.eu-west-1.amazonaws.com/prod";
 
+// ---- VIEW PASSWORD -------------
+let passwordVisible = false;
+const setPasswordVisible = () => passwordVisible = !passwordVisible;
+const passwordInput = document.getElementById("password-input");
+const passwordButton = document.querySelector(".show-btn");
+
+const stylePasswordInput = () => {
+    const hasValue = passwordInput.value.length;
+    passwordButton.style.display = hasValue ? "flex" : "none";
+    passwordInput.style.paddingRight = hasValue ? "3rem" : "20px";
+
+}
+const labelPasswordButton = () => {
+    passwordButton.setAttribute("aria-label", passwordVisible ? "Hide password" : "Show password");
+}
+stylePasswordInput();
+
+passwordInput.addEventListener("input", stylePasswordInput);
+
+passwordButton.addEventListener("click", () => {
+    setPasswordVisible();
+    labelPasswordButton();
+    passwordInput.type = passwordVisible ? "text" : "password";
+    document.getElementById("show-btn-img").src = passwordVisible ? "./assets/img/svg/hide.svg" : "./assets/img/svg/show.svg";
+});
+
 // ---- LOGIN ---------------------
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
     e.preventDefault();
